@@ -2,7 +2,7 @@ package org.openjfx.MetaHeuristicAlgoVisualizer;
 
 import java.util.ArrayList;
 
-import com.sun.javafx.geom.Point2D;
+import javafx.geometry.Point2D;
 
 public class Route {
 	private ArrayList<Point2D> cityOrder;
