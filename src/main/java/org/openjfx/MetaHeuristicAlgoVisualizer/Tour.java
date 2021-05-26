@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 public class Tour {
 	private ArrayList<Integer> tour = new ArrayList<>();
 	
-	public ArrayList<Integer> getRoute() {
+	public ArrayList<Integer> getTour() {
 		return tour;
 	}
 	
@@ -30,5 +30,10 @@ public class Tour {
 	
 	public int size() {
 		return tour.size();
+	}
+	
+	@Override
+	public String toString() {
+		return tour.toString();
 	}
 }

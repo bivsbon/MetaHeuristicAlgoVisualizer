@@ -17,7 +17,8 @@ public class AlgoTest {
 	private static ArrayList<IMetaHeuristicAlgorithm> algs = new ArrayList<>();
 	private static final double error = 0.01;
 	private static SortingContext sc = new SortingContext();
-	private static double shortest = Double.MAX_VALUE;
+	private static double solution = Double.MAX_VALUE;
+	private static Tour solutionTour;
 	static CityData data;
 	static Tour tour;
 	static ArrayList<Point2D> cityList = new ArrayList<Point2D>();
@@ -48,23 +49,28 @@ public class AlgoTest {
 		// Test the algorithm
 		for (IMetaHeuristicAlgorithm alg : algs) {
 			sc.setAlgorithm(alg);
-			if (checkResult(alg.solve(data))) {
+			double result = alg.solve(data);
+			if (checkResult(result)) {
 				System.out.println(alg.getAlgName() + "passed");
 			}
 			else {
 				System.out.println(alg.getAlgName() + "failed");
 			}
+			System.out.println(result);
 		}
 		// Show correct solution
-		System.out.println("Correct result is: " + shortest);
+		System.out.println("Correct solution is: " + solution);
+		System.out.println(solutionTour.toString());
 	}
 
+	@SuppressWarnings("unchecked")
 	private static void search() {
 		if (order.size() == N) {
 			tour = new Tour(order);
 			double currentCost = data.getCostOnTour(tour);
-			if (shortest > currentCost) {
-				shortest = currentCost;
+			if (solution > currentCost) {
+				solution = currentCost;
+				solutionTour = new Tour((ArrayList<Integer>) tour.getTour().clone());
 			}
 		}
 		else {
@@ -80,7 +86,7 @@ public class AlgoTest {
 	}
 	
 	private static boolean checkResult(double result) {
-		if (result > shortest-error && result < shortest + error) return true;
+		if (result > solution-error && result < solution+error) return true;
 		else return false;
 	}
 }
