@@ -1,6 +1,7 @@
 package org.openjfx.MetaHeuristicAlgoVisualizer;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javafx.geometry.Point2D;
 
@@ -11,11 +12,8 @@ public class SortingContext {
 		this.alg = alg;
 	}
 	
-	public SortingContext() {
-		super();
-	}
-	
-	public double solve(ArrayList<Point2D> data) {
+	public double solve(CityData data) {
+		Objects.requireNonNull(alg, "You haven't set an algorithm!");
 		return alg.solve(data);
 	}
 }

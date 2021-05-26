@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 public class TabuSearch implements IMetaHeuristicAlgorithm{
 
 	@Override
-	public double solve(ArrayList<Point2D> data) {
+	public double solve(CityData data) {
 		// TODO Auto-generated method stub
 		return 1.0;
 	}
