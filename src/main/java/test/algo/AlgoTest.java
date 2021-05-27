@@ -67,7 +67,7 @@ public class AlgoTest {
 	private static void search() {
 		if (order.size() == N) {
 			tour = new Tour(order);
-			double currentCost = data.getCostOnTour(tour);
+			double currentCost = tour.getCost(data);
 			if (solution > currentCost) {
 				solution = currentCost;
 				solutionTour = new Tour((ArrayList<Integer>) tour.getTour().clone());

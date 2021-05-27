@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class BeeColony implements IMetaHeuristicAlgorithm{
-	private static final int N_ITERATIONS = 300;
-	private static final int N_FOOD_SOURCES = 25;
-	private static final int limit = 10;
+	private static final int N_ITERATIONS = 1000;
+	private static final int N_FOOD_SOURCES = 50;
+	private static final int LIMIT = 10;
 
 	private Random generator = new Random();
 	
@@ -47,7 +47,6 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 			}
 		}
 		
-		System.out.println(solutionTour.toString());
 		return solution;
 	}
 	
@@ -88,7 +87,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		double[] prob = new double[N_FOOD_SOURCES];
 		double sum = 0.0;
 		for (double f : fitnessValues) {
-			sum += f;
+			sum += f;	
 		}
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			prob[i] = fitnessValues[i] / sum;
@@ -108,7 +107,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 	
 	private void scoutBeePhase() {
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
-			if (trial[i] > limit) {
+			if (trial[i] > LIMIT) {
 				int permNo;
 				do {
 					permNo = generator.nextInt(nFactorial);
@@ -120,7 +119,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 	
 	private void costValuesInit() {
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
-			costValues[i] = data.getCostOnTour(foodSources.get(i));
+			costValues[i] = foodSources.get(i).getCost(data);
 		}
 	}
 	
@@ -135,7 +134,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		fact = new int[nCities];
 		fact[k] = 1;
 		while (++k < nCities) {
-			fact[k] = fact[k - 1] * k;	
+			fact[k] = fact[k - 1] * k;
 		}
 		nFactorial = fact[k-1];
 	}
@@ -151,7 +150,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		Tour newFoodSource = new Tour(generateIthPermutaion(nCities, newPerm));
 		
 		// Greedy selection based on fitness function
-		double newCost = data.getCostOnTour(newFoodSource);
+		double newCost = newFoodSource.getCost(data);
 		double newFitness = fitness(newCost);
 		if (newFitness > fitnessValues[i]) {;
 			foodSources.set(i, newFoodSource);
