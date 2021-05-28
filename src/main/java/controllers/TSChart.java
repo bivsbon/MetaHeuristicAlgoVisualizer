@@ -1,49 +1,59 @@
 package controllers;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-import javafx.beans.Observable;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.ScatterChart;
-import javafx.scene.chart.ValueAxis;
 import javafx.scene.shape.Line;
 
 public class TSChart<X, Y> extends ScatterChart<X, Y> {
-	private ObservableList<Data<X, Y>> lines;
+    private ObservableList<Line> lines = FXCollections.observableArrayList();
+	private ObservableList<Integer> tour = FXCollections.observableArrayList();
+	private int dataSize = 14;
 
 	public TSChart(Axis<X> xAxis, Axis<Y> yAxis) {
 		super(xAxis, yAxis);
+		for (int i = 0; i < dataSize; i++) {
+	        Line line = new Line();
+	        getPlotChildren().add(line);
+	        lines.add(line);
+		}
 		
-		lines = FXCollections.observableArrayList(d -> new Observable[] {d.YValueProperty(), d.XValueProperty()});
+		updateTour(Arrays.asList(3, 4, 5, 7, 0, 6, 12, 10, 11, 2, 1, 9, 8, 13));
+		
         // listen to list changes and re-plot
-        lines.addListener((ListChangeListener<? super Data<X, Y>>)observable -> layoutPlotChildren());
+        tour.addListener((InvalidationListener)observable -> layoutPlotChildren());
 	}
 	
-	public void addHorizontalValueMarker(Data<X, Y> marker) {
-        Objects.requireNonNull(marker, "the marker must not be null");
-        if (lines.contains(marker)) return;
-        Line line = new Line();
-        marker.setNode(line);
-        getPlotChildren().add(line);
-        lines.add(marker);
+	public void updateTour(List<Integer> list) {
+        Objects.requireNonNull(list, "the tour must not be null");
+		this.tour.setAll(list);
+		dataSize = list.size();
     }
 	
 	@Override
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
-        for (Data<X, Y> line : lines) {
-            double lower = ((ValueAxis) getXAxis()).getLowerBound();
-            X lowerX = getXAxis().toRealValue(lower);
-            double upper = ((ValueAxis) getXAxis()).getUpperBound();
-            X upperX = getXAxis().toRealValue(upper);
-            Line l = (Line) line.getNode();
-            l.setStartX(getXAxis().getDisplayPosition(lowerX));
-            l.setEndX(getXAxis().getDisplayPosition(upperX));
-            l.setStartY(getYAxis().getDisplayPosition(line.getYValue()));
-            l.setEndY(l.getStartY());
+        for (int i = 1; i < dataSize; i++) {
+            Line l = lines.get(i);
+            setLineEndPoints(l, i, i-1);
         }
+        setLineEndPoints(lines.get(0), 0, dataSize-1);
     }
+	
+	private void setLineEndPoints(Line l, int index1, int index2) {
+        X startX = getData().get(0).getData().get(index1).getXValue();
+        X endX = getData().get(0).getData().get(index2).getXValue();
+        Y startY = getData().get(0).getData().get(index1).getYValue();
+        Y endY = getData().get(0).getData().get(index2).getYValue();
+        l.setStartX(getXAxis().getDisplayPosition(startX));
+        l.setEndX(getXAxis().getDisplayPosition(endX));
+        l.setStartY(getYAxis().getDisplayPosition(startY));
+        l.setEndY(getYAxis().getDisplayPosition(endY));
+	}
 }
