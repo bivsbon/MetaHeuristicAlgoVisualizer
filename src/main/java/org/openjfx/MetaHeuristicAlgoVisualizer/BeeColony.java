@@ -14,8 +14,8 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 	private int nCities;
 	private CityData data;
 	
-	private int nFactorial;
-	private int[] fact;
+	FactorialArray fa;
+	
 	private ArrayList<Integer> permutation = new ArrayList<>();
 	
 	private ArrayList<Tour> foodSources = new ArrayList<>();
@@ -58,6 +58,10 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		fitnessInit();
 	}
 	
+	private void factorialInit() {
+		fa = new FactorialArray(nCities);
+	}
+
 	private double fitness(double x) {
 		if (x >= 0) return 1/(1+x);
 		else return 1 + Math.abs(x);
@@ -68,11 +72,11 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		int permNo;
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			do {
-				permNo = generator.nextInt(nFactorial);
+				permNo = generator.nextInt(fa.nFactorial);
 			} while (permutation.contains(permNo));
 			
 			permutation.add(permNo);
-			foodSources.add(new Tour(generateIthPermutaion(nCities, permNo)));
+			foodSources.add(new Tour(fa.generateIthPermutaion(nCities, permNo)));
 		}
 	}
 	
@@ -110,9 +114,9 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 			if (trial[i] > LIMIT) {
 				int permNo;
 				do {
-					permNo = generator.nextInt(nFactorial);
+					permNo = generator.nextInt(fa.nFactorial);
 				} while (permutation.contains(permNo));
-				foodSources.set(i, new Tour(generateIthPermutaion(nCities, permNo)));
+				foodSources.set(i, new Tour(fa.generateIthPermutaion(nCities, permNo)));
 			}
 		}
 	}
@@ -129,16 +133,6 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		}
 	}
 	
-	private void factorialInit() {
-		int k = 0;
-		fact = new int[nCities];
-		fact[k] = 1;
-		while (++k < nCities) {
-			fact[k] = fact[k - 1] * k;
-		}
-		nFactorial = fact[k-1];
-	}
-	
 	private boolean updateFoodSource(int i) {
 		int partner;
 		do {
@@ -146,8 +140,8 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		} while (i == partner);
 			
 		// Create new food source with the random partner
-		int newPerm = generateNewPerm(permutation.get(i), permutation.get(partner));
-		Tour newFoodSource = new Tour(generateIthPermutaion(nCities, newPerm));
+		int newPerm = fa.generateNewPerm(permutation.get(i), permutation.get(partner));
+		Tour newFoodSource = new Tour(fa.generateIthPermutaion(nCities, newPerm));
 		
 		// Greedy selection based on fitness function
 		double newCost = newFoodSource.getCost(data);
@@ -162,36 +156,6 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		}
 		else trial[i]++;
 		return false;
-	}
-	
- 	private ArrayList<Integer> generateIthPermutaion(int n, int i) {
-		int j, k = 0;
-		Integer perm[] = new Integer[n];
-		
-		// compute factorial code
-		for (k = 0; k < n; ++k)
-		{
-			perm[k] = i / fact[n - 1 - k];
-			i = i % fact[n - 1 - k];
-		}
-		
-	   // re-adjust values to obtain the permutation
-	   // start from the end and check if preceding values are lower
-	   for (k = n - 1; k > 0; --k)
-	      for (j = k - 1; j >= 0; --j)
-	         if (perm[j] <= perm[k])
-	            perm[k]++;
-
-
-	   ArrayList<Integer> permList = new ArrayList<>(Arrays.asList(perm));
-	   return permList;
-	}
-	
-	private int generateNewPerm(int p1, int p2) {
-		double phi = generator.nextDouble()*2 - 1;
-		int newPerm = (int) (p1 + phi * (p1 - p2));
-		newPerm = Math.max(0, Math.min(nFactorial, newPerm));
-		return newPerm;
 	}
 	
 	public String getAlgName() {

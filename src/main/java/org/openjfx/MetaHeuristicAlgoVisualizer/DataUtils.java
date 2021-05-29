@@ -5,8 +5,8 @@ import java.util.Random;
 
 import javafx.geometry.Point2D;
 
-
 public class DataUtils {
+	
 	public static ArrayList<Point2D> generateData(int nCities, double xLimit, double yLimit) {
 		ArrayList<Point2D> cities = new ArrayList<Point2D>();
 		Random generator = new Random();
@@ -21,4 +21,8 @@ public class DataUtils {
 		}
 		return cities;
 	}
+	
+
+	
+	
 }

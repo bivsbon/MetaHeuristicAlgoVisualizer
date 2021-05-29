@@ -1,7 +1,12 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
+
+import org.openjfx.MetaHeuristicAlgoVisualizer.App;
+import org.openjfx.MetaHeuristicAlgoVisualizer.FactorialArray;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,15 +22,18 @@ public class PrimaryController implements Initializable{
 	ObservableList<String> algs = FXCollections.observableArrayList("alg1", "alg2", "alg3");
 	public ListView<String> listView1;
 	public AnchorPane anchor1;
+	Random generator = new Random();
+	FactorialArray fa = new FactorialArray(14);
+    final NumberAxis xAxis = new NumberAxis(0, 10, 1);
+    final NumberAxis yAxis = new NumberAxis(0, 500, 100);
+    final TSChart<Number,Number> sc = new
+        TSChart<Number,Number>(xAxis,yAxis,fa.generateIthPermutaion(14, generator.nextInt(123456)));
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println("Reset stage");
 		listView1.setItems(algs);
-        final NumberAxis xAxis = new NumberAxis(0, 10, 1);
-        final NumberAxis yAxis = new NumberAxis(0, 500, 100);        
-        final TSChart<Number,Number> sc = new
-            TSChart<Number,Number>(xAxis,yAxis);
         sc.setTitle("Traveling salesman map");
        
         XYChart.Series series1 = new XYChart.Series();
@@ -51,6 +59,22 @@ public class PrimaryController implements Initializable{
         AnchorPane.setBottomAnchor(sc, 0.0);
         AnchorPane.setLeftAnchor(sc, 0.0);
         AnchorPane.setRightAnchor(sc, 0.0);
+	}
+//	
+//	public void updateGraph() {
+//		while (true) {
+//            try {
+//    			Thread.sleep(1000);
+//    		} catch (InterruptedException e) {
+//    			// TODO Auto-generated catch block
+//    			e.printStackTrace();
+//    		}
+//            
+//        }
+//	}
+	
+	public void updateGraph() throws IOException {
+		App.setRoot("primary");
 	}
 }
 

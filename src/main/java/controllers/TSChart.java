@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +15,7 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 	private ObservableList<Integer> tour = FXCollections.observableArrayList();
 	private int dataSize = 14;
 
-	public TSChart(Axis<X> xAxis, Axis<Y> yAxis) {
+	public TSChart(Axis<X> xAxis, Axis<Y> yAxis, List<Integer> tour) {
 		super(xAxis, yAxis);
 		for (int i = 0; i < dataSize; i++) {
 	        Line line = new Line();
@@ -24,10 +23,10 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 	        lines.add(line);
 		}
 		
-		updateTour(Arrays.asList(3, 4, 5, 7, 0, 6, 12, 10, 11, 2, 1, 9, 8, 13));
+		updateTour(tour);
 		
         // listen to list changes and re-plot
-        tour.addListener((InvalidationListener)observable -> layoutPlotChildren());
+        this.tour.addListener((InvalidationListener)observable -> layoutPlotChildren());
 	}
 	
 	public void updateTour(List<Integer> list) {
@@ -41,9 +40,9 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
         super.layoutPlotChildren();
         for (int i = 1; i < dataSize; i++) {
             Line l = lines.get(i);
-            setLineEndPoints(l, i, i-1);
+            setLineEndPoints(l, tour.get(i), tour.get(i-1));
         }
-        setLineEndPoints(lines.get(0), 0, dataSize-1);
+        setLineEndPoints(lines.get(0), tour.get(0), tour.get(dataSize-1));
     }
 	
 	private void setLineEndPoints(Line l, int index1, int index2) {
