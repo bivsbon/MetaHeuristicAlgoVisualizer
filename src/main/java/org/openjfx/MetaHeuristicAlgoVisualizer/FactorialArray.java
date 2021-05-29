@@ -6,10 +6,16 @@ import java.util.Random;
 
 public class FactorialArray {
 	private int[] fact;
-	public int nFactorial;
+	private int nFactorial;
+	private int n;
 	Random generator = new Random();
 	
+	public int getNFactorial() {
+		return nFactorial;
+	}
+	
 	public FactorialArray(int n) {
+		this.n = n;
 		int k = 0;
 		fact = new int[n];
 		fact[k] = 1;
@@ -19,7 +25,7 @@ public class FactorialArray {
 		nFactorial = fact[k-1];
 	}
 
- 	public ArrayList<Integer> generateIthPermutaion(int n, int i) {
+ 	public ArrayList<Integer> generateIthPermutaion(int i) {
 		int j, k = 0;
 		Integer perm[] = new Integer[n];
 		

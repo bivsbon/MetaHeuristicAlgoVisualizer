@@ -44,7 +44,7 @@ public class AlgoTest {
 		// Add the algorithm to test
 		algs.add(new SimulatedAnnealing());
 		algs.add(new TabuSearch());
-		algs.add(new BeeColony());
+		algs.add(BeeColony.getInstance());
 		
 		// Test the algorithm
 		for (IMetaHeuristicAlgorithm alg : algs) {

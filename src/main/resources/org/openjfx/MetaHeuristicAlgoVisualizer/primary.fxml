@@ -22,7 +22,7 @@
                   <Insets />
                </VBox.margin>
             </Region>
-            <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="181.0" text="Generate random data" />
+            <Button mnemonicParsing="false" onMouseClicked="#showRandomData" prefHeight="49.0" prefWidth="181.0" text="Generate random data" />
             <Button layoutX="10.0" layoutY="595.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="181.0" text="Next iteration" />
             <Button layoutX="10.0" layoutY="561.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="181.0" text="Run" />
 			</children>
