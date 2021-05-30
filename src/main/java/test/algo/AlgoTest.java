@@ -51,10 +51,10 @@ public class AlgoTest {
 			sc.setAlgorithm(alg);
 			double result = alg.solve(data);
 			if (checkResult(result)) {
-				System.out.println(alg.toString() + "passed");
+				System.out.println(alg.toString() + " passed");
 			}
 			else {
-				System.out.println(alg.toString() + "failed");
+				System.out.println(alg.toString() + " failed");
 			}
 			System.out.println(result);
 		}

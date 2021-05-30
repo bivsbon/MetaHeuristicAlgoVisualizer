@@ -23,7 +23,7 @@ public class SortingContext {
 		return alg == null;
 	}
 	
-	public Tour getCurrentTour() {
-		return alg.getCurrenTour();
+	public Tour getBestTour() {
+		return alg.getBestTour();
 	}
 }

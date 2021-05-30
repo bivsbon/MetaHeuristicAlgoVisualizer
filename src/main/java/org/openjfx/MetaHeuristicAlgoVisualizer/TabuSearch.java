@@ -30,7 +30,6 @@ public class TabuSearch extends MetaHeuristicAlgorithm{
 
 	@Override
 	public void readData(CityData data) {
-		// TODO Auto-generated method stub
 		this.data = data;
 		nCities = data.size();
 	}

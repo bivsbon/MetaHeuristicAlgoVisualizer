@@ -41,7 +41,7 @@ public class PrimaryController implements Initializable{
 	SortingContext alg = new SortingContext();
 	// Chart
 	XYChart.Series series = new XYChart.Series();
-	private static int dataSize = 10;
+	private static int dataSize = 15;
 	Task<Void> timer = new Task<Void>() {
 	    @Override
 	    protected Void call() throws Exception {
@@ -60,14 +60,6 @@ public class PrimaryController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("Reset stage");
 		listView1.setItems(algs);
-		timer.setOnSucceeded(event -> finishedSleeping());
-        
-        anchor1.getChildren().add(chart);
-        AnchorPane.setTopAnchor(chart, 5.0);
-        AnchorPane.setBottomAnchor(chart, 5.0);
-        AnchorPane.setLeftAnchor(chart, 5.0);
-        AnchorPane.setRightAnchor(chart, 5.0);
-        chart.setData(series);
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
 			@Override
 			public void changed(ObservableValue<? extends MetaHeuristicAlgorithm> observable, MetaHeuristicAlgorithm oldValue, MetaHeuristicAlgorithm newValue) {
@@ -78,10 +70,19 @@ public class PrimaryController implements Initializable{
 			}
 		});
         
+		timer.setOnSucceeded(event -> finishedSleeping());
+        
+        anchor1.getChildren().add(chart);
+        AnchorPane.setTopAnchor(chart, 5.0);
+        AnchorPane.setBottomAnchor(chart, 5.0);
+        AnchorPane.setLeftAnchor(chart, 5.0);
+        AnchorPane.setRightAnchor(chart, 5.0);
+        chart.setData(series);
+        
 	}
 	
 	private Object finishedSleeping() {
-		chart.updateTour(alg.getCurrentTour());
+		chart.updateTour(alg.getBestTour());
 		return null;
 	}
 	
@@ -107,7 +108,7 @@ public class PrimaryController implements Initializable{
 	
 	public void showNextIteration() {
 		if (alg.iterate()) {
-			chart.updateTour(alg.getCurrentTour());
+			chart.updateTour(alg.getBestTour());
 		}
 	}
 	
@@ -116,7 +117,7 @@ public class PrimaryController implements Initializable{
 		{
 			while (alg.iterate()) {
 			}	
-			chart.updateTour(alg.getCurrentTour());
+			chart.updateTour(alg.getBestTour());
 		}
 	}
 	
