@@ -33,6 +33,7 @@ public class PrimaryController implements Initializable{
 	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
+	public AnchorPane anchor2;
 	// Utility objects
 	Random generator = new Random();
 	FactorialArray fa = new FactorialArray(dataSize);
@@ -71,8 +72,9 @@ public class PrimaryController implements Initializable{
 		});
         
 		timer.setOnSucceeded(event -> finishedSleeping());
-        
+
         anchor1.getChildren().add(chart);
+        anchor2.getChildren().add(chart);
         AnchorPane.setTopAnchor(chart, 5.0);
         AnchorPane.setBottomAnchor(chart, 5.0);
         AnchorPane.setLeftAnchor(chart, 5.0);

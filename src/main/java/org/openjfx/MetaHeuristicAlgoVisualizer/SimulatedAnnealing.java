@@ -5,6 +5,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private static final double INITIAL_TEMPERATURE = 9999;
     private static final double COOLING_RATE = 0.00001;
     private static final double MIN_TEMPERATURE = 0.99;
+    
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
     
     private Tour currentTour;
@@ -34,7 +35,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 	public double solve(CityData data) {
 		readData(data);
         
-        while (temperature > 0.99) {
+        while (temperature > MIN_TEMPERATURE) {
             Tour newSolution = new Tour(currentTour);
             newSolution.swapRanDomCity();
             
