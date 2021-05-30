@@ -42,21 +42,19 @@ public class AlgoTest {
 		search();
 		
 		// Add the algorithm to test
-		BeeColony bc = BeeColony.getInstance();
-		bc.readData(data);
-		algs.add(new SimulatedAnnealing());
-		algs.add(new TabuSearch());
-		algs.add(bc);
+		algs.add(SimulatedAnnealing.getInstance());
+		algs.add(TabuSearch.getInstance());
+		algs.add(BeeColony.getInstance());
 		
 		// Test the algorithm
 		for (MetaHeuristicAlgorithm alg : algs) {
 			sc.setAlgorithm(alg);
 			double result = alg.solve(data);
 			if (checkResult(result)) {
-				System.out.println(alg.getAlgName() + "passed");
+				System.out.println(alg.toString() + "passed");
 			}
 			else {
-				System.out.println(alg.getAlgName() + "failed");
+				System.out.println(alg.toString() + "failed");
 			}
 			System.out.println(result);
 		}

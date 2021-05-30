@@ -14,4 +14,16 @@ public class SortingContext {
 	public boolean iterate() {
 		return alg.iterate();
 	}
+	
+	public void readData(CityData data) {
+		alg.readData(data);
+	}
+	
+	public boolean notSet() {
+		return alg == null;
+	}
+	
+	public Tour getCurrentTour() {
+		return alg.getCurrenTour();
+	}
 }

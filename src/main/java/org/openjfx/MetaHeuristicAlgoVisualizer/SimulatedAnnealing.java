@@ -2,12 +2,23 @@ package org.openjfx.MetaHeuristicAlgoVisualizer;
 
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private double temperature = 9999;
-    private static final double coolingRate = 0.00005;
-	
-	@Override
-	public String getAlgName() {
-		return "Simulated Annealing Algorithm ";
-	}
+    private static final double COOLING_RATE = 0.00005;
+    private static final double MIN_TEMPERATURE = 0.99;
+    private static SimulatedAnnealing instance = new SimulatedAnnealing();
+    
+    private SimulatedAnnealing() {
+    	
+    }
+    
+    public static SimulatedAnnealing getInstance() {
+    	return instance;
+    }
+    
+    public void readData(CityData data ) {
+    	this.data = data;
+    	nCities = data.size();
+        currentTour = new Tour(nCities);
+    }
     
     private double acceptanceProbability(double currentDistance, double newDistance) {
 		if (newDistance < currentDistance) {
@@ -18,10 +29,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 
 	@Override
 	public double solve(CityData data) {
-		nCities = data.size();
-		this.data = data;
-        //create random initial solution
-        currentTour = new Tour(nCities);
+		readData(data);
         
         while (temperature > 0.99) {
             Tour newSolution = new Tour(currentTour);
@@ -37,14 +45,38 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
                 currentTour = new Tour(newSolution);
             }
             
-            temperature *= 1 - coolingRate;   // Cool system
+            temperature *= 1 - COOLING_RATE;   // Cool system
         }
         return currentTour.getCost(data);
 	}
 
 	@Override
 	public boolean iterate() {
-		// TODO Auto-generated method stub
-		return false;
+		if (temperature > MIN_TEMPERATURE)
+		{
+            Tour newSolution = new Tour(currentTour);
+            newSolution.swapRanDomCity();
+            
+            // Get distance of 2 tours
+            double currentDistance   = currentTour.getCost(data);
+            double neighbourDistance = newSolution.getCost(data);
+
+            // Decide the distance base on fomula
+            double rand = generator.nextDouble();
+            if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
+                currentTour = new Tour(newSolution);
+            }
+            
+            temperature *= 1 - COOLING_RATE;   // Cool system
+			return true;
+		}
+		else {
+			return false;			
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Simulated Annealing";
 	}
 }

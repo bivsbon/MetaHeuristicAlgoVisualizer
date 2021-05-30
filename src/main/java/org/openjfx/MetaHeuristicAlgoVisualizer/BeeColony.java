@@ -9,7 +9,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final int N_ITERATIONS = 1000;
 	private static final int N_FOOD_SOURCES = 50;
 	private static final int LIMIT = 10;
-	public static int iterations_left;
+	private static int iterations_left;
 	
 	FactorialArray fa;
 	
@@ -29,6 +29,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	
 	public void readData(CityData data) {
 		this.data = data;
+		nCities = data.size();
 		variablesInit();
 	}
 	
@@ -51,6 +52,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 
 	@Override
 	public double solve(CityData data) {
+		readData(data);
 		for (int it = 0; it < iterations_left; it++) {
 			employedBeePhase();
 			onlookerBeePhase();
@@ -62,7 +64,6 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	}
 	
 	private void variablesInit() {
-		nCities = data.size();
 		iterations_left = N_ITERATIONS;
 		currentSolution = Double.MAX_VALUE;
 		currentTour = new Tour(nCities);
@@ -182,7 +183,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 		}
 	}
 	
-	public String getAlgName() {
-		return "Artificial Bee Colony Algorithm ";
+	public String toString() {
+		return "Artificial Bee Colony";
 	}
 }

@@ -8,7 +8,14 @@ import org.openjfx.MetaHeuristicAlgoVisualizer.BeeColony;
 import org.openjfx.MetaHeuristicAlgoVisualizer.CityData;
 import org.openjfx.MetaHeuristicAlgoVisualizer.DataUtils;
 import org.openjfx.MetaHeuristicAlgoVisualizer.FactorialArray;
+import org.openjfx.MetaHeuristicAlgoVisualizer.MetaHeuristicAlgorithm;
+import org.openjfx.MetaHeuristicAlgoVisualizer.SimulatedAnnealing;
+import org.openjfx.MetaHeuristicAlgoVisualizer.SortingContext;
+import org.openjfx.MetaHeuristicAlgoVisualizer.TabuSearch;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -22,13 +29,17 @@ import javafx.scene.layout.AnchorPane;
 
 public class PrimaryController implements Initializable{
 	@FXML
-	ObservableList<String> algs = FXCollections.observableArrayList("alg1", "alg2", "alg3");
-	public ListView<String> listView1;
+	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList
+	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
+	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
+	// Utility objects
 	Random generator = new Random();
 	FactorialArray fa = new FactorialArray(dataSize);
+	// Algorithm
 	CityData data = new CityData();
-	BeeColony alg = BeeColony.getInstance();
+	SortingContext alg = new SortingContext();
+	// Chart
 	XYChart.Series series = new XYChart.Series();
 	private static int dataSize = 10;
 	Task<Void> timer = new Task<Void>() {
@@ -57,13 +68,17 @@ public class PrimaryController implements Initializable{
         AnchorPane.setLeftAnchor(chart, 5.0);
         AnchorPane.setRightAnchor(chart, 5.0);
         chart.setData(series);
+        listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
+			@Override
+			public void changed(ObservableValue<? extends MetaHeuristicAlgorithm> observable, MetaHeuristicAlgorithm oldValue, MetaHeuristicAlgorithm newValue) {
+				alg.setAlgorithm(newValue);
+				if (data.size() != 0) {
+					alg.readData(data);
+				}
+			}
+		});
+        
 	}
-//	
-//	public void updateGraph() {
-//		while (true) {
-//           
-//        }
-//	}
 	
 	private Object finishedSleeping() {
 		chart.updateTour(alg.getCurrentTour());
@@ -73,7 +88,9 @@ public class PrimaryController implements Initializable{
 	public void generateNewRandomData() throws IOException {
 		data = DataUtils.generateData(dataSize, 20, 20);
 		addDataToGraph(data);
-        BeeColony.getInstance().readData(data);
+		if (!alg.notSet()) {
+	        alg.readData(data);
+		}
         chart.removeTour();
 	}
 
@@ -95,7 +112,10 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
-		while (alg.iterate()) {
+		if (!alg.notSet() && data.size() > 0)
+		{
+			while (alg.iterate()) {
+			}	
 			chart.updateTour(alg.getCurrentTour());
 		}
 	}

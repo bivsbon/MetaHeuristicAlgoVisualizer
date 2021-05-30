@@ -18,6 +18,12 @@ public abstract class MetaHeuristicAlgorithm {
 	}
 
 	public abstract double solve(CityData data);
-	public abstract String getAlgName();
 	public abstract boolean iterate();
+	public abstract void readData(CityData data);
+	public Tour getCurrenTour() {
+		return currentTour;
+	}
+	
+	@Override
+	public abstract String toString();
 }
