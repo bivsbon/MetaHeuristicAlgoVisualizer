@@ -1,31 +1,24 @@
 package org.openjfx.MetaHeuristicAlgoVisualizer;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class BeeColony implements IMetaHeuristicAlgorithm{
+public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
 	
-	public static int iterations_left = 1000;
+	private static final int N_ITERATIONS = 1000;
 	private static final int N_FOOD_SOURCES = 50;
 	private static final int LIMIT = 10;
-
-	private Random generator = new Random();
-	
-	private int nCities;
-	private CityData data;
+	public static int iterations_left;
 	
 	FactorialArray fa;
 	
-	private ArrayList<Integer> permutation = new ArrayList<>();
+	private ArrayList<Long> permutation = new ArrayList<>();
 	
 	private ArrayList<Tour> foodSources = new ArrayList<>();
 	private double[] costValues = new double[N_FOOD_SOURCES];
 	private double[] fitnessValues = new double[N_FOOD_SOURCES];
 	private double[] trial = new double[N_FOOD_SOURCES];
-	
-	private double currentSolution = Double.MAX_VALUE;
-	private Tour currentTour;
 	
 	private BeeColony() {
 	}
@@ -34,20 +27,12 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		return instance;
 	}
 	
-	public Tour getCurrentTour() {
-		return currentTour;
-	}
-	
-	public double getCurrentSolution() {
-		return currentSolution;
-	}
-	
 	public void readData(CityData data) {
 		this.data = data;
 		variablesInit();
 	}
 	
-	public void iterate() {
+	public boolean iterate() {
 		// Call this function to execute one iteration of the algorithm
 		if (iterations_left > 0) {
 			employedBeePhase();
@@ -57,26 +42,31 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 			// Update solution
 			updateSolution();
 			iterations_left--;
+			return true;
 		}
 		else {
-			System.out.println("Algorithm done running");
+			return false;
 		}
 	}
 
 	@Override
 	public double solve(CityData data) {
-
 		for (int it = 0; it < iterations_left; it++) {
 			employedBeePhase();
 			onlookerBeePhase();
 			scoutBeePhase();
 		}
+		updateSolution();
 		
 		return currentSolution;
 	}
 	
 	private void variablesInit() {
 		nCities = data.size();
+		iterations_left = N_ITERATIONS;
+		currentSolution = Double.MAX_VALUE;
+		currentTour = new Tour(nCities);
+		
 		factorialInit();
 		foodSourcesInit();
 		costValuesInit();
@@ -94,10 +84,10 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 	
 	private void foodSourcesInit() {
 		// Generate random permutation
-		int permNo;
+		long permNo;
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			do {
-				permNo = generator.nextInt(fa.getNFactorial());
+				permNo = ThreadLocalRandom.current().nextLong(fa.getNFactorial());
 			} while (permutation.contains(permNo));
 			
 			permutation.add(permNo);
@@ -137,9 +127,9 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 	private void scoutBeePhase() {
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			if (trial[i] > LIMIT) {
-				int permNo;
+				long permNo;
 				do {
-					permNo = generator.nextInt(fa.getNFactorial());
+					permNo = ThreadLocalRandom.current().nextLong(fa.getNFactorial());
 				} while (permutation.contains(permNo));
 				foodSources.set(i, new Tour(fa.generateIthPermutaion(permNo)));
 			}
@@ -165,7 +155,7 @@ public class BeeColony implements IMetaHeuristicAlgorithm{
 		} while (i == partner);
 			
 		// Create new food source with the random partner
-		int newPerm = fa.generateNewPerm(permutation.get(i), permutation.get(partner));
+		long newPerm = fa.generateNewPerm(permutation.get(i), permutation.get(partner));
 		Tour newFoodSource = new Tour(fa.generateIthPermutaion(newPerm));
 		
 		// Greedy selection based on fitness function

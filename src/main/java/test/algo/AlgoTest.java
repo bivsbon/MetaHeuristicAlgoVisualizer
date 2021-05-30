@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.openjfx.MetaHeuristicAlgoVisualizer.BeeColony;
 import org.openjfx.MetaHeuristicAlgoVisualizer.CityData;
-import org.openjfx.MetaHeuristicAlgoVisualizer.IMetaHeuristicAlgorithm;
+import org.openjfx.MetaHeuristicAlgoVisualizer.MetaHeuristicAlgorithm;
 import org.openjfx.MetaHeuristicAlgoVisualizer.Tour;
 import org.openjfx.MetaHeuristicAlgoVisualizer.SimulatedAnnealing;
 import org.openjfx.MetaHeuristicAlgoVisualizer.SortingContext;
@@ -14,7 +14,7 @@ import javafx.geometry.Point2D;
 
 public class AlgoTest {
 	private static final int N = 10;
-	private static ArrayList<IMetaHeuristicAlgorithm> algs = new ArrayList<>();
+	private static ArrayList<MetaHeuristicAlgorithm> algs = new ArrayList<>();
 	private static final double error = 0.01;
 	private static SortingContext sc = new SortingContext();
 	private static double solution = Double.MAX_VALUE;
@@ -42,12 +42,14 @@ public class AlgoTest {
 		search();
 		
 		// Add the algorithm to test
+		BeeColony bc = BeeColony.getInstance();
+		bc.readData(data);
 		algs.add(new SimulatedAnnealing());
 		algs.add(new TabuSearch());
-		algs.add(BeeColony.getInstance());
+		algs.add(bc);
 		
 		// Test the algorithm
-		for (IMetaHeuristicAlgorithm alg : algs) {
+		for (MetaHeuristicAlgorithm alg : algs) {
 			sc.setAlgorithm(alg);
 			double result = alg.solve(data);
 			if (checkResult(result)) {

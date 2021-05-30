@@ -1,7 +1,7 @@
 package controllers;
 
 import java.util.List;
-import java.util.Objects;
+import org.openjfx.MetaHeuristicAlgoVisualizer.Tour;
 
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
@@ -36,6 +36,10 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 		}
     }
 	
+	public void updateTour(Tour tour) {
+		updateTour(tour.getTour());
+	}
+	
 	@Override
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
@@ -64,5 +68,14 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 			getData().remove(0);
 		}
 		getData().add(data);
+	}
+	
+	public void removeTour() {
+		for (Line l : lines) {
+			getPlotChildren().remove(l);
+		}
+		dataSize = 0;
+		tour.clear();
+		lines.clear();
 	}
 }

@@ -2,16 +2,16 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
-
-import org.openjfx.MetaHeuristicAlgoVisualizer.App;
+import org.openjfx.MetaHeuristicAlgoVisualizer.BeeColony;
+import org.openjfx.MetaHeuristicAlgoVisualizer.CityData;
 import org.openjfx.MetaHeuristicAlgoVisualizer.DataUtils;
 import org.openjfx.MetaHeuristicAlgoVisualizer.FactorialArray;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -26,8 +26,20 @@ public class PrimaryController implements Initializable{
 	public ListView<String> listView1;
 	public AnchorPane anchor1;
 	Random generator = new Random();
-	FactorialArray fa = new FactorialArray(10);
+	FactorialArray fa = new FactorialArray(dataSize);
+	CityData data = new CityData();
+	BeeColony alg = BeeColony.getInstance();
 	XYChart.Series series = new XYChart.Series();
+	private static int dataSize = 10;
+	Task<Void> timer = new Task<Void>() {
+	    @Override
+	    protected Void call() throws Exception {
+	       try {
+	            Thread.sleep(1);
+	       } catch (InterruptedException e) {}
+	       return null;    
+	    }
+	};
     final NumberAxis xAxis = new NumberAxis(-1, 21, 1);
     final NumberAxis yAxis = new NumberAxis(-1, 21, 1);
     final TSChart<Number,Number> chart = new
@@ -37,38 +49,36 @@ public class PrimaryController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("Reset stage");
 		listView1.setItems(algs);
+		timer.setOnSucceeded(event -> finishedSleeping());
         
         anchor1.getChildren().add(chart);
-        AnchorPane.setTopAnchor(chart, 0.0);
-        AnchorPane.setBottomAnchor(chart, 0.0);
-        AnchorPane.setLeftAnchor(chart, 0.0);
-        AnchorPane.setRightAnchor(chart, 0.0);
+        AnchorPane.setTopAnchor(chart, 5.0);
+        AnchorPane.setBottomAnchor(chart, 5.0);
+        AnchorPane.setLeftAnchor(chart, 5.0);
+        AnchorPane.setRightAnchor(chart, 5.0);
         chart.setData(series);
 	}
 //	
 //	public void updateGraph() {
 //		while (true) {
-//            try {
-//    			Thread.sleep(1000);
-//    		} catch (InterruptedException e) {
-//    			// TODO Auto-generated catch block
-//    			e.printStackTrace();
-//    		}
-//            
+//           
 //        }
 //	}
 	
-	public void updateGraph() throws IOException {
-		App.setRoot("primary");
+	private Object finishedSleeping() {
+		chart.updateTour(alg.getCurrentTour());
+		return null;
 	}
 	
-	public void showRandomData() throws IOException {
-		ArrayList<Point2D> data = DataUtils.generateData(10, 20, 20);
+	public void generateNewRandomData() throws IOException {
+		data = DataUtils.generateData(dataSize, 20, 20);
 		addDataToGraph(data);
+        BeeColony.getInstance().readData(data);
+        chart.removeTour();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void addDataToGraph(ArrayList<Point2D> data) {
+	private void addDataToGraph(CityData data) {
         chart.setTitle("Traveling salesman map");
         series = new XYChart.Series();
         series.setName("City");
@@ -77,5 +87,18 @@ public class PrimaryController implements Initializable{
         }
         chart.setData(series);
 	}
+	
+	public void showNextIteration() {
+		if (alg.iterate()) {
+			chart.updateTour(alg.getCurrentTour());
+		}
+	}
+	
+	public void runAlgorithm() throws InterruptedException {
+		while (alg.iterate()) {
+			chart.updateTour(alg.getCurrentTour());
+		}
+	}
+	
 }
 

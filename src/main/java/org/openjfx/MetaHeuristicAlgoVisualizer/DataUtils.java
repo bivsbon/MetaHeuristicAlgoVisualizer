@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 
 public class DataUtils {
 	
-	public static ArrayList<Point2D> generateData(int nCities, double xLimit, double yLimit) {
+	public static CityData generateData(int nCities, double xLimit, double yLimit) {
 		ArrayList<Point2D> cities = new ArrayList<Point2D>();
 		Random generator = new Random();
 		double x, y;
@@ -19,7 +19,8 @@ public class DataUtils {
 			} while (cities.contains(new Point2D(x, y)));
 			cities.add(new Point2D(x, y));
 		}
-		return cities;
+		CityData data = new CityData(cities);
+		return data;
 	}
 	
 

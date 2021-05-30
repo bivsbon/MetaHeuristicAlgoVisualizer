@@ -1,10 +1,6 @@
 package org.openjfx.MetaHeuristicAlgoVisualizer;
 
-import java.util.ArrayList;
-
-import javafx.geometry.Point2D;
-
-public class TabuSearch implements IMetaHeuristicAlgorithm{
+public class TabuSearch extends MetaHeuristicAlgorithm{
 
 	@Override
 	public double solve(CityData data) {
@@ -15,5 +11,11 @@ public class TabuSearch implements IMetaHeuristicAlgorithm{
 	@Override
 	public String getAlgName() {
 		return "Tabu Search Algorithm ";
+	}
+
+	@Override
+	public boolean iterate() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
