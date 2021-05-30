@@ -1,8 +1,8 @@
-package controllers;
+package controller;
 
 import java.util.List;
-import org.openjfx.MetaHeuristicAlgoVisualizer.Tour;
 
+import datamodel.Tour;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

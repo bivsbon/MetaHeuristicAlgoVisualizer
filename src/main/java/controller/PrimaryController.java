@@ -1,19 +1,16 @@
-package controllers;
+package controller;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-import org.openjfx.MetaHeuristicAlgoVisualizer.BeeColony;
-import org.openjfx.MetaHeuristicAlgoVisualizer.CityData;
-import org.openjfx.MetaHeuristicAlgoVisualizer.DataUtils;
-import org.openjfx.MetaHeuristicAlgoVisualizer.FactorialArray;
-import org.openjfx.MetaHeuristicAlgoVisualizer.MetaHeuristicAlgorithm;
-import org.openjfx.MetaHeuristicAlgoVisualizer.SimulatedAnnealing;
-import org.openjfx.MetaHeuristicAlgoVisualizer.SortingContext;
-import org.openjfx.MetaHeuristicAlgoVisualizer.TabuSearch;
 
-import javafx.beans.InvalidationListener;
+import algorithm.BeeColony;
+import algorithm.MetaHeuristicAlgorithm;
+import algorithm.SimulatedAnnealing;
+import algorithm.SortingContext;
+import algorithm.TabuSearch;
+import datamodel.CityData;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,8 +21,11 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import utility.DataUtils;
+import utility.FactorialArray;
 
 public class PrimaryController implements Initializable{
 	@FXML
@@ -33,7 +33,6 @@ public class PrimaryController implements Initializable{
 	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
-	public AnchorPane anchor2;
 	// Utility objects
 	Random generator = new Random();
 	FactorialArray fa = new FactorialArray(dataSize);
@@ -41,7 +40,7 @@ public class PrimaryController implements Initializable{
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
 	// Chart
-	XYChart.Series series = new XYChart.Series();
+	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	private static int dataSize = 15;
 	Task<Void> timer = new Task<Void>() {
 	    @Override
@@ -74,7 +73,6 @@ public class PrimaryController implements Initializable{
 		timer.setOnSucceeded(event -> finishedSleeping());
 
         anchor1.getChildren().add(chart);
-        anchor2.getChildren().add(chart);
         AnchorPane.setTopAnchor(chart, 5.0);
         AnchorPane.setBottomAnchor(chart, 5.0);
         AnchorPane.setLeftAnchor(chart, 5.0);
@@ -97,13 +95,12 @@ public class PrimaryController implements Initializable{
         chart.removeTour();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void addDataToGraph(CityData data) {
         chart.setTitle("Traveling salesman map");
-        series = new XYChart.Series();
+        series = new XYChart.Series<Number, Number>();
         series.setName("City");
         for (Point2D p : data) {
-            series.getData().add(new XYChart.Data(p.getX(), p.getY()));
+            series.getData().add(new Data<Number, Number>(p.getX(), p.getY()));
         }
         chart.setData(series);
 	}

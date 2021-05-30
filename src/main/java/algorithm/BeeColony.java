@@ -1,7 +1,11 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package algorithm;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import datamodel.CityData;
+import datamodel.Tour;
+import utility.FactorialArray;
 
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();

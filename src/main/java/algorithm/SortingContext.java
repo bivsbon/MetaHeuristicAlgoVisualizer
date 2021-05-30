@@ -1,4 +1,7 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package algorithm;
+
+import datamodel.CityData;
+import datamodel.Tour;
 
 public class SortingContext {
 	private MetaHeuristicAlgorithm alg;

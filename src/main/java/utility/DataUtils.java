@@ -1,8 +1,9 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package utility;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import datamodel.CityData;
 import javafx.geometry.Point2D;
 
 public class DataUtils {

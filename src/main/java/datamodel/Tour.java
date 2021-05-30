@@ -1,4 +1,4 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package datamodel;
 
 import java.util.ArrayList;
 import java.util.Collections;

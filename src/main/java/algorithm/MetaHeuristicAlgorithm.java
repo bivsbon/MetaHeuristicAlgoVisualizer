@@ -1,6 +1,9 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package algorithm;
 
 import java.util.Random;
+
+import datamodel.CityData;
+import datamodel.Tour;
 
 public abstract class MetaHeuristicAlgorithm {
 	protected int nCities;

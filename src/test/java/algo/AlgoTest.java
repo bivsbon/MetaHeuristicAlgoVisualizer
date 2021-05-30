@@ -1,15 +1,14 @@
-package test.algo;
+package algo;
 
 import java.util.ArrayList;
 
-import org.openjfx.MetaHeuristicAlgoVisualizer.BeeColony;
-import org.openjfx.MetaHeuristicAlgoVisualizer.CityData;
-import org.openjfx.MetaHeuristicAlgoVisualizer.MetaHeuristicAlgorithm;
-import org.openjfx.MetaHeuristicAlgoVisualizer.Tour;
-import org.openjfx.MetaHeuristicAlgoVisualizer.SimulatedAnnealing;
-import org.openjfx.MetaHeuristicAlgoVisualizer.SortingContext;
-import org.openjfx.MetaHeuristicAlgoVisualizer.TabuSearch;
-
+import algorithm.BeeColony;
+import algorithm.MetaHeuristicAlgorithm;
+import algorithm.SimulatedAnnealing;
+import algorithm.SortingContext;
+import algorithm.TabuSearch;
+import datamodel.CityData;
+import datamodel.Tour;
 import javafx.geometry.Point2D;
 
 public class AlgoTest {

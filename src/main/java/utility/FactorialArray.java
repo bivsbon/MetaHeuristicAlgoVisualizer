@@ -1,4 +1,4 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;

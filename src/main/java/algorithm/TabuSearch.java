@@ -1,4 +1,6 @@
-package org.openjfx.MetaHeuristicAlgoVisualizer;
+package algorithm;
+
+import datamodel.CityData;
 
 public class TabuSearch extends MetaHeuristicAlgorithm{
 	private static final TabuSearch instance = new TabuSearch();
