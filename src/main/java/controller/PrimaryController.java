@@ -3,8 +3,10 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import algorithm.BeeColony;
+import algorithm.BruteForce;
 import algorithm.MetaHeuristicAlgorithm;
 import algorithm.SimulatedAnnealing;
 import algorithm.SortingContext;
@@ -39,25 +41,19 @@ public class PrimaryController implements Initializable{
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
+	BruteForce bf;
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
-	Task<Void> timer = new Task<Void>() {
-	    @Override
-	    protected Void call() throws Exception {
-	       try {
-	            Thread.sleep(1);
-	       } catch (InterruptedException e) {}
-	       return null;
-	    }
-	};
+	XYChart.Series<Number, Number> seriesClone = copySeries(series);
     final NumberAxis xAxis = new NumberAxis(-1, 21, 1);
     final NumberAxis yAxis = new NumberAxis(-1, 21, 1);
-    final TSChart<Number,Number> chart = new
-        TSChart<Number,Number>(xAxis, yAxis);
+    final TSChart<Number,Number> solutionChart = new
+            TSChart<Number,Number>(xAxis, yAxis);
+    final TSChart<Number,Number> mainChart = new
+            TSChart<Number,Number>(xAxis, yAxis);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("Reset stage");
 		listView1.setItems(algs);
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
 			@Override
@@ -68,21 +64,15 @@ public class PrimaryController implements Initializable{
 				}
 			}
 		});
-        
-		timer.setOnSucceeded(event -> finishedSleeping());
 
-        anchor1.getChildren().add(chart);
-        AnchorPane.setTopAnchor(chart, 5.0);
-        AnchorPane.setBottomAnchor(chart, 5.0);
-        AnchorPane.setLeftAnchor(chart, 5.0);
-        AnchorPane.setRightAnchor(chart, 5.0);
-        chart.setData(series);
-        
-	}
-	
-	private Object finishedSleeping() {
-		chart.updateTour(alg.getBestTour());
-		return null;
+        anchor1.getChildren().add(mainChart);
+        anchor2.getChildren().add(solutionChart);
+        mainChart.setTitle("Traveling salesman map");
+
+        fitChartToPane(mainChart);
+        fitChartToPane(solutionChart);
+        mainChart.setData(series);
+        solutionChart.setData(seriesClone);
 	}
 	
 	public void generateNewRandomData() throws IOException {
@@ -92,23 +82,28 @@ public class PrimaryController implements Initializable{
 		if (!alg.notSet()) {
 	        alg.readData(data);
 		}
-        chart.removeTour();
+		bf = new BruteForce(data);
+		
+        mainChart.removeTour();
+        solutionChart.removeTour();
+        solutionChart.updateTour(bf.getSolutionTour());
 	}
 
 	private void addDataToGraph(CityData data) {
-        chart.setTitle("Traveling salesman map");
         series = new XYChart.Series<Number, Number>();
-        series.setName("City");
         for (Point2D p : data) {
             series.getData().add(new Data<Number, Number>(p.getX(), p.getY()));
         }
-        chart.setData(series);
+        mainChart.setData(series);
+        seriesClone = copySeries(series);
+        solutionChart.setData(seriesClone);
+        series.setName("City");
 	}
 	
 	public void showNextIteration() {
 		chart.updateTour(alg.getBestTour());
 		if (alg.iterate()) {
-			chart.updateTour(alg.getBestTour());
+			mainChart.updateTour(alg.getBestTour());
 		}
 	}
 	
@@ -118,28 +113,50 @@ public class PrimaryController implements Initializable{
 		{
 			while (alg.iterate()) {
 			}	
-			chart.updateTour(alg.getBestTour());
+			mainChart.updateTour(alg.getBestTour());
 		}
 	}
 	
 	private int getDataSize() {
 		String text = textFieldCity.getText();
-		int n = Integer.parseInt(text);
-		if (n > 15) {
-			nCitiesWarningLabel.setText("Must not be greater than 15");
-			textFieldCity.setText("15");
-			return 15;
-		}
-		else if (n < 3) {
-			nCitiesWarningLabel.setText("Must not be less than 3");
-			textFieldCity.setText("3");
-			return 3;
-		}
-		else {
-			nCitiesWarningLabel.setText("");
-			return n;
+		int n;
+		try{
+			n = Integer.parseInt(text);
+			if (n > 15) {
+				nCitiesWarningLabel.setText("Must not be greater than 15");
+				textFieldCity.setText("15");
+				return 15;
+			}
+			else if (n < 3) {
+				nCitiesWarningLabel.setText("Must not be less than 3");
+				textFieldCity.setText("3");
+				return 3;
+			}
+			else {
+				nCitiesWarningLabel.setText("");
+				return n;
+			}
+		} catch (NumberFormatException e) {
+			nCitiesWarningLabel.setText("Not an integer number, use 5");
+			textFieldCity.setText("5");
+			return 5;
 		}
 	}
 	
+	private void fitChartToPane(TSChart<Number, Number> chart) {
+        AnchorPane.setTopAnchor(chart, 5.0);
+        AnchorPane.setBottomAnchor(chart, 5.0);
+        AnchorPane.setLeftAnchor(chart, 5.0);
+        AnchorPane.setRightAnchor(chart, 5.0);
+	}
+	
+	
+	private <S, T> XYChart.Series<S, T> copySeries(XYChart.Series<S, T> series) {
+	    XYChart.Series<S, T> copy = new XYChart.Series<>(series.getName(),
+	            series.getData().stream()
+	                  .map(data -> new XYChart.Data<S, T>(data.getXValue(), data.getYValue()))
+	                  .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+	    return copy;
+	}
 }
 

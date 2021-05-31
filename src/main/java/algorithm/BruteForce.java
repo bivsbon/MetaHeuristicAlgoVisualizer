@@ -21,6 +21,10 @@ public class BruteForce {
 		search();
 	}
 	
+	public Tour getSolutionTour() {
+		return solutionTour;
+	}
+	
 	private void search() {
 		if (order.size() == dataSize) {
 			tour = new Tour(order);
