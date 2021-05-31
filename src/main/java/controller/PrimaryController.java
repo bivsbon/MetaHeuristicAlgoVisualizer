@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import algorithm.BeeColony;
@@ -23,9 +22,9 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import utility.DataUtils;
-import utility.FactorialArray;
 
 public class PrimaryController implements Initializable{
 	@FXML
@@ -33,15 +32,12 @@ public class PrimaryController implements Initializable{
 	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
-	// Utility objects
-	Random generator = new Random();
-	FactorialArray fa = new FactorialArray(dataSize);
+	public TextField textFieldCity;
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
-	private static int dataSize = 15;
 	Task<Void> timer = new Task<Void>() {
 	    @Override
 	    protected Void call() throws Exception {
@@ -87,6 +83,7 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void generateNewRandomData() throws IOException {
+		int dataSize = getDataSize();
 		data = DataUtils.generateData(dataSize, 20, 20);
 		addDataToGraph(data);
 		if (!alg.notSet()) {
@@ -118,6 +115,20 @@ public class PrimaryController implements Initializable{
 			}	
 			chart.updateTour(alg.getBestTour());
 		}
+	}
+	
+	private int getDataSize() {
+		String text = textFieldCity.getText();
+		int n = Integer.parseInt(text);
+		if (n > 15) {
+			textFieldCity.setText("15");
+			return 15;
+		}
+		else if (n < 3) {
+			textFieldCity.setText("3");
+			return 3;
+		}
+		else return n;
 	}
 	
 }
