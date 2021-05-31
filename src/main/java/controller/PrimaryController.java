@@ -16,7 +16,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -61,6 +60,7 @@ public class PrimaryController implements Initializable{
 				alg.setAlgorithm(newValue);
 				if (data.size() != 0) {
 					alg.readData(data);
+			        mainChart.removeTour();
 				}
 			}
 		});
@@ -83,7 +83,7 @@ public class PrimaryController implements Initializable{
 	        alg.readData(data);
 		}
 		bf = new BruteForce(data);
-		
+
         mainChart.removeTour();
         solutionChart.removeTour();
         solutionChart.updateTour(bf.getSolutionTour());
@@ -101,16 +101,19 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void showNextIteration() {
-		mainChart.updateTour(alg.getBestTour());
-		if (alg.iterate()) {
+		if (!alg.notSet() && data.size() > 0)
+		{
 			mainChart.updateTour(alg.getBestTour());
+			if (alg.iterate()) {
+				mainChart.updateTour(alg.getBestTour());
+			}
 		}
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
-		mainChart.updateTour(alg.getBestTour());
 		if (!alg.notSet() && data.size() > 0)
 		{
+			mainChart.updateTour(alg.getBestTour());
 			while (alg.iterate()) {
 			}	
 			mainChart.updateTour(alg.getBestTour());
@@ -127,10 +130,10 @@ public class PrimaryController implements Initializable{
 				textFieldCity.setText("15");
 				return 15;
 			}
-			else if (n < 3) {
-				nCitiesWarningLabel.setText("Must not be less than 3");
-				textFieldCity.setText("3");
-				return 3;
+			else if (n < 5) {
+				nCitiesWarningLabel.setText("Must not be less than 5");
+				textFieldCity.setText("5");
+				return 5;
 			}
 			else {
 				nCitiesWarningLabel.setText("");

@@ -9,10 +9,9 @@ import utility.FactorialArray;
 
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
-	
 	private static final int N_ITERATIONS = 1000;
-	private static final int N_FOOD_SOURCES = 50;
-	private static final int LIMIT = 10;
+	private static final int N_FOOD_SOURCES = 3;
+	private static final int LIMIT = 1;
 	private static int iterations_left;
 	
 	FactorialArray fa;
@@ -70,7 +69,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	private void variablesInit() {
 		iterations_left = N_ITERATIONS;
 		currentSolution = Double.MAX_VALUE;
-		
+
 		factorialInit();
 		foodSourcesInit();
 		costValuesInit();
@@ -89,6 +88,8 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	private void foodSourcesInit() {
 		// Generate random permutation
 		long permNo;
+		foodSources = new ArrayList<Tour>();
+		permutation = new ArrayList<Long>();
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			do {
 				permNo = ThreadLocalRandom.current().nextLong(fa.getNFactorial());
@@ -97,6 +98,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 			permutation.add(permNo);
 			foodSources.add(new Tour(fa.generateIthPermutaion(permNo)));
 		}
+		System.out.println("Algorithm set1");
 	}
 	
 	private void employedBeePhase() {
