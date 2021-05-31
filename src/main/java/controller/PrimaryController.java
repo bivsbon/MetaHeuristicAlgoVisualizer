@@ -103,12 +103,14 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void showNextIteration() {
+		chart.updateTour(alg.getBestTour());
 		if (alg.iterate()) {
 			chart.updateTour(alg.getBestTour());
 		}
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
+		chart.updateTour(alg.getBestTour());
 		if (!alg.notSet() && data.size() > 0)
 		{
 			while (alg.iterate()) {

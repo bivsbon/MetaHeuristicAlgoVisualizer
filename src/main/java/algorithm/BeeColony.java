@@ -10,9 +10,9 @@ import utility.FactorialArray;
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
 	
-	private static final int N_ITERATIONS = 10000;
-	private static final int N_FOOD_SOURCES = 150;
-	private static final int LIMIT = 30;
+	private static final int N_ITERATIONS = 1000;
+	private static final int N_FOOD_SOURCES = 50;
+	private static final int LIMIT = 10;
 	private static int iterations_left;
 	
 	FactorialArray fa;
@@ -33,6 +33,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	public void readData(CityData data) {
 		this.data = data;
 		nCities = data.size();
+		bestTour = new Tour(nCities);
 		variablesInit();
 	}
 	
@@ -69,7 +70,6 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	private void variablesInit() {
 		iterations_left = N_ITERATIONS;
 		currentSolution = Double.MAX_VALUE;
-		bestTour = new Tour(nCities);
 		
 		factorialInit();
 		foodSourcesInit();
