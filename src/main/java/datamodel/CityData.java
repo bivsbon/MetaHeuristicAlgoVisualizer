@@ -31,4 +31,8 @@ public class CityData implements Iterable<Point2D>{
 	public Iterator<Point2D> iterator() {
 		return cityList.iterator();
 	}
+	
+	public double distance(int index1, int index2) {
+		return cityList.get(index1).distance(cityList.get(index2));
+	}
 }

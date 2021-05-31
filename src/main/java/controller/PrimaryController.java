@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import algorithm.BeeColony;
-import algorithm.BruteForce;
+import algorithm.SolutionGenerator;
 import algorithm.MetaHeuristicAlgorithm;
 import algorithm.SimulatedAnnealing;
 import algorithm.SortingContext;
@@ -40,7 +40,7 @@ public class PrimaryController implements Initializable{
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
-	BruteForce bf;
+	SolutionGenerator sg;
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	XYChart.Series<Number, Number> seriesClone = copySeries(series);
@@ -82,11 +82,11 @@ public class PrimaryController implements Initializable{
 		if (!alg.notSet()) {
 	        alg.readData(data);
 		}
-		bf = new BruteForce(data);
+		sg = new SolutionGenerator(data);
 
         mainChart.removeTour();
         solutionChart.removeTour();
-        solutionChart.updateTour(bf.getSolutionTour());
+        solutionChart.updateTour(sg.getSolutionTour());
 	}
 
 	private void addDataToGraph(CityData data) {
