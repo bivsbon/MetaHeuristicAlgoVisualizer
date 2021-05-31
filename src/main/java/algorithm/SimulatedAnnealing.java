@@ -51,7 +51,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
                 currentTour = new Tour(newSolution);
             }
             
-            if (currentTour.getCost(data) < bestTour.getCost(data)) {
+            if (currentDistance < bestTour.getCost(data)) {
             	bestTour = new Tour(currentTour);
             }
             	

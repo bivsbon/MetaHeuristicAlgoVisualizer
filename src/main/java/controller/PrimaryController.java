@@ -33,6 +33,7 @@ public class PrimaryController implements Initializable{
 	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
+	public AnchorPane anchor2;
 	public TextField textFieldCity;
 	public Label nCitiesWarningLabel;
 	// Algorithm
@@ -46,7 +47,7 @@ public class PrimaryController implements Initializable{
 	       try {
 	            Thread.sleep(1);
 	       } catch (InterruptedException e) {}
-	       return null;    
+	       return null;
 	    }
 	};
     final NumberAxis xAxis = new NumberAxis(-1, 21, 1);
