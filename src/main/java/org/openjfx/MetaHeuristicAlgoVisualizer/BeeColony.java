@@ -185,4 +185,9 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	public String toString() {
 		return "Artificial Bee Colony";
 	}
+	
+	public String getVariableString() {
+		// TODO return variable for user
+		return "";
+	}
 }

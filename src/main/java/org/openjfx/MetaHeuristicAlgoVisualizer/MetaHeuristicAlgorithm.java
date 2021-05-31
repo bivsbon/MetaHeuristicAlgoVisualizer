@@ -20,6 +20,7 @@ public abstract class MetaHeuristicAlgorithm {
 	public abstract double solve(CityData data);
 	public abstract boolean iterate();
 	public abstract void readData(CityData data);
+	public abstract String getVariableString();
 	
 	@Override
 	public abstract String toString();

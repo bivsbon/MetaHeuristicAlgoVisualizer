@@ -38,7 +38,6 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
         while (temperature > MIN_TEMPERATURE) {
             Tour newSolution = new Tour(currentTour);
             newSolution.swapRanDomCity();
-            
             // Get distance of 2 tours
             double currentDistance   = currentTour.getCost(data);
             double neighbourDistance = newSolution.getCost(data);
@@ -86,5 +85,11 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 	@Override
 	public String toString() {
 		return "Simulated Annealing";
+	}
+
+	@Override
+	public String getVariableString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

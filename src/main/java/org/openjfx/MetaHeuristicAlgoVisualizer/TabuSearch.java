@@ -33,4 +33,10 @@ public class TabuSearch extends MetaHeuristicAlgorithm{
 		this.data = data;
 		nCities = data.size();
 	}
+
+	@Override
+	public String getVariableString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
