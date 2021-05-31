@@ -30,6 +30,7 @@
                   <Insets top="20.0" />
                </VBox.margin></Label>
             <TextField fx:id="textFieldCity" />
+            <Label fx:id="nCitiesWarningLabel" />
             <Region prefHeight="417.0" prefWidth="167.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets />

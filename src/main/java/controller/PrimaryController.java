@@ -21,6 +21,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -33,6 +34,7 @@ public class PrimaryController implements Initializable{
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public AnchorPane anchor1;
 	public TextField textFieldCity;
+	public Label nCitiesWarningLabel;
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
@@ -123,14 +125,19 @@ public class PrimaryController implements Initializable{
 		String text = textFieldCity.getText();
 		int n = Integer.parseInt(text);
 		if (n > 15) {
+			nCitiesWarningLabel.setText("Must not be greater than 15");
 			textFieldCity.setText("15");
 			return 15;
 		}
 		else if (n < 3) {
+			nCitiesWarningLabel.setText("Must not be less than 3");
 			textFieldCity.setText("3");
 			return 3;
 		}
-		else return n;
+		else {
+			nCitiesWarningLabel.setText("");
+			return n;
+		}
 	}
 	
 }
