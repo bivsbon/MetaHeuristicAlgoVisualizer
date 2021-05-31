@@ -44,12 +44,14 @@ public class PrimaryController implements Initializable{
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	XYChart.Series<Number, Number> seriesClone = copySeries(series);
-    final NumberAxis xAxis = new NumberAxis(-1, 21, 1);
-    final NumberAxis yAxis = new NumberAxis(-1, 21, 1);
+    final NumberAxis xAxisMain = new NumberAxis(-1, 21, 1);
+    final NumberAxis yAxisMain = new NumberAxis(-1, 21, 1);
+    final NumberAxis xAxisSolution = new NumberAxis(-1, 21, 1);
+    final NumberAxis yAxisSolution = new NumberAxis(-1, 21, 1);
     final TSChart<Number,Number> solutionChart = new
-            TSChart<Number,Number>(xAxis, yAxis);
+            TSChart<Number,Number>(xAxisSolution, yAxisSolution);
     final TSChart<Number,Number> mainChart = new
-            TSChart<Number,Number>(xAxis, yAxis);
+            TSChart<Number,Number>(xAxisMain, yAxisMain);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -69,6 +71,11 @@ public class PrimaryController implements Initializable{
         anchor2.getChildren().add(solutionChart);
         mainChart.setTitle("Traveling salesman map");
 
+        // Hide stuffs to simplify solution chart
+        xAxisSolution.setTickLabelsVisible(false);
+        yAxisSolution.setTickLabelsVisible(false);
+        solutionChart.setLegendVisible(false);
+        
         fitChartToPane(mainChart);
         fitChartToPane(solutionChart);
         mainChart.setData(series);
