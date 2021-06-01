@@ -6,7 +6,7 @@ import datamodel.Tour;
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private double temperature = 9999;
     private static final double INITIAL_TEMPERATURE = 9999;
-    private static final double COOLING_RATE = 0.00001;
+    private static final double COOLING_RATE = 0.03;
     private static final double MIN_TEMPERATURE = 0.99;
     
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
@@ -77,15 +77,16 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
                 currentTour = new Tour(newSolution);
             }
             
-            if (currentDistance < bestTour.getCost(data)) {
-            	bestTour = new Tour(currentTour);
-            }
+//            if (currentDistance < bestTour.getCost(data)) {
+//            	bestTour = new Tour(currentTour);
+//            }
+            bestTour = new Tour(currentTour);
             
             temperature *= 1 - COOLING_RATE;   // Cool system
 			return true;
 		}
 		else {
-			return false;			
+			return false;		
 		}
 	}
 	

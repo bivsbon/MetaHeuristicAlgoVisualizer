@@ -13,6 +13,8 @@ import algorithm.AlgorithmContext;
 import algorithm.TabuSearch;
 import datamodel.CityData;
 import helper.DataUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import utility.LogScreen;
 import utility.TSChart;
 
@@ -49,6 +52,8 @@ public class PrimaryController implements Initializable{
 	CityData data = new CityData();
 	AlgorithmContext alg = new AlgorithmContext();
 	SolutionGenerator sg;
+	boolean runningFlag = true;
+	Timeline timer = new Timeline(new KeyFrame(Duration.millis(1), event -> finishedSleeping()));
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	XYChart.Series<Number, Number> seriesClone = copySeries(series);
@@ -72,6 +77,7 @@ public class PrimaryController implements Initializable{
 			public void changed(ObservableValue<? extends MetaHeuristicAlgorithm> observable, MetaHeuristicAlgorithm oldValue, MetaHeuristicAlgorithm newValue) {
 				alg.setAlgorithm(newValue);
 				if (data.size() != 0) {
+					runningFlag = false;
 					alg.readData(data);
 			        mainChart.removeTour();
 				}
@@ -99,7 +105,17 @@ public class PrimaryController implements Initializable{
         resetBtn.setDisable(true);
 	}
 	
+	private void finishedSleeping() {
+		timer.stop();
+		if (alg.iterate() && runningFlag == true) {
+			mainChart.updateTour(alg.getBestTour());
+			timer.play();
+		}
+	}
+
 	public void generateNewRandomData() throws IOException {
+		runningFlag = false;
+		logScreen.setDisplayDisabled(true);
 		int dataSize = getDataSize();
 		data = DataUtils.generateData(dataSize, 20, 20);
 		addDataToGraph(data);
@@ -117,6 +133,7 @@ public class PrimaryController implements Initializable{
         // Button logic
 		runBtn.setDisable(false);
 		resetBtn.setDisable(true);
+		logScreen.setDisplayDisabled(false);
 	}
 
 	private void addDataToGraph(CityData data) {
@@ -141,16 +158,14 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
+		runningFlag = true;
 		logScreen.setDisplayDisabled(true);
 		if (assertRunCondition()) {
-			mainChart.updateTour(alg.getBestTour());
-			while (alg.iterate()) {
-			}
-			mainChart.updateTour(alg.getBestTour());
-
 	        // Button logic
 			runBtn.setDisable(true);
 			resetBtn.setDisable(false);
+			mainChart.updateTour(alg.getBestTour());
+			timer.play();
 		}
 		logScreen.setDisplayDisabled(false);
 	}
@@ -182,6 +197,7 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void resetAlg() {
+		runningFlag = false;
 		logScreen.clear();
 		if (!alg.notSet() && data.size() > 0)
 		{
@@ -200,7 +216,6 @@ public class PrimaryController implements Initializable{
         AnchorPane.setLeftAnchor(chart, 5.0);
         AnchorPane.setRightAnchor(chart, 5.0);
 	}
-	
 	
 	private <S, T> XYChart.Series<S, T> copySeries(XYChart.Series<S, T> series) {
 	    XYChart.Series<S, T> copy = new XYChart.Series<>(series.getName(),
