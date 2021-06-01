@@ -27,9 +27,12 @@
 				<ListView fx:id="listView1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="71.0" prefWidth="181.0" VBox.vgrow="NEVER" />
             <Label text="Nuber of cities (min 5, max 15)">
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets left="5.0" top="20.0" />
                </VBox.margin></Label>
-            <TextField fx:id="textFieldCity" />
+            <TextField fx:id="textFieldCity">
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin></TextField>
             <Label fx:id="nCitiesWarningLabel" />
             <Label fx:id="runAlgWarningLabel" />
             <Region prefHeight="417.0" prefWidth="167.0" VBox.vgrow="ALWAYS">
@@ -37,6 +40,21 @@
                   <Insets />
                </VBox.margin>
             </Region>
+            <Label text="Delay between iterations:">
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="delayField" prefHeight="25.0" prefWidth="123.0">
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Slider fx:id="delaySlider">
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
+            </Slider>
             <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#generateNewRandomData" prefHeight="49.0" prefWidth="181.0" text="Generate random data" />
             <Button layoutX="10.0" layoutY="595.0" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#showNextIteration" prefHeight="49.0" prefWidth="181.0" text="Next iteration" />
             <Button fx:id="runBtn" layoutX="10.0" layoutY="561.0" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#runAlgorithm" prefHeight="49.0" prefWidth="181.0" text="Run" />

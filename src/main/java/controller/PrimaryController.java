@@ -28,6 +28,7 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
@@ -47,6 +48,8 @@ public class PrimaryController implements Initializable{
 	public Label runAlgWarningLabel;
 	public Button runBtn;
 	public Button resetBtn;
+	public TextField delayField;
+	public Slider delaySlider;
 	LogScreen logScreen = utility.LogScreen.getInstance();
 	// Algorithm
 	CityData data = new CityData();
@@ -69,7 +72,7 @@ public class PrimaryController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Set the list view component for displaying log
-		logScreen.setListView(logView);;
+		logScreen.setListView(logView);
 		listView1.setItems(algs);
 		// Logic when switching algorithms
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
@@ -90,19 +93,11 @@ public class PrimaryController implements Initializable{
 
         anchor1.getChildren().add(mainChart);
         anchor2.getChildren().add(solutionChart);
-        mainChart.setTitle("Traveling salesman map");
-
-        // Hide stuffs to simplify solution chart
-        xAxisSolution.setTickLabelsVisible(false);
-        yAxisSolution.setTickLabelsVisible(false);
-        solutionChart.setLegendVisible(false);
         
-        fitChartToPane(mainChart);
-        fitChartToPane(solutionChart);
-        mainChart.setData(series);
-        solutionChart.setData(seriesClone);
+        configureChart();
+        configureSlider();
         
-        resetBtn.setDisable(true);
+        resetBtn.setDisable(true);;
 	}
 	
 	private void finishedSleeping() {
@@ -159,6 +154,7 @@ public class PrimaryController implements Initializable{
 	
 	public void runAlgorithm() throws InterruptedException {
 		runningFlag = true;
+		timer = new Timeline(new KeyFrame(Duration.millis((int)delaySlider.getValue()), event -> finishedSleeping()));
 		logScreen.setDisplayDisabled(true);
 		if (assertRunCondition()) {
 	        // Button logic
@@ -238,6 +234,36 @@ public class PrimaryController implements Initializable{
 		}
 		return false;
 		
+	}
+
+	private void configureSlider() {
+        delaySlider.setValue(20);
+        delaySlider.setMin(1);
+        delaySlider.setMax(100);
+        delaySlider.setShowTickLabels(true);
+        delaySlider.setShowTickMarks(true);
+        delaySlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				Integer value = newValue.intValue();
+				delayField.setText(Integer.toString(value));
+				timer = new Timeline(new KeyFrame(Duration.millis((int)delaySlider.getValue()), event -> finishedSleeping()));
+			}
+		});
+	}
+	
+	private void configureChart() {
+		mainChart.setTitle("Traveling salesman map");
+
+        // Hide stuffs to simplify solution chart
+        xAxisSolution.setTickLabelsVisible(false);
+        yAxisSolution.setTickLabelsVisible(false);
+        solutionChart.setLegendVisible(false);
+        
+        fitChartToPane(mainChart);
+        fitChartToPane(solutionChart);
+        mainChart.setData(series);
+        solutionChart.setData(seriesClone);
 	}
 }
 

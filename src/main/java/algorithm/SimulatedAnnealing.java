@@ -6,7 +6,7 @@ import datamodel.Tour;
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private double temperature = 9999;
     private static final double INITIAL_TEMPERATURE = 9999;
-    private static final double COOLING_RATE = 0.03;
+    private static final double COOLING_RATE = 0.02;
     private static final double MIN_TEMPERATURE = 0.99;
     
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
