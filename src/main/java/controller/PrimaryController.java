@@ -22,6 +22,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -37,6 +38,8 @@ public class PrimaryController implements Initializable{
 	public AnchorPane anchor2;
 	public TextField textFieldCity;
 	public Label nCitiesWarningLabel;
+	public Button runBtn;
+	public Button resetBtn;
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
@@ -46,8 +49,8 @@ public class PrimaryController implements Initializable{
 	XYChart.Series<Number, Number> seriesClone = copySeries(series);
     final NumberAxis xAxisMain = new NumberAxis(-1, 21, 1);
     final NumberAxis yAxisMain = new NumberAxis(-1, 21, 1);
-    final NumberAxis xAxisSolution = new NumberAxis(-1, 21, 1);
-    final NumberAxis yAxisSolution = new NumberAxis(-1, 21, 1);
+    final NumberAxis xAxisSolution = new NumberAxis(-1, 21, 25);
+    final NumberAxis yAxisSolution = new NumberAxis(-1, 21, 25);
     final TSChart<Number,Number> solutionChart = new
             TSChart<Number,Number>(xAxisSolution, yAxisSolution);
     final TSChart<Number,Number> mainChart = new
@@ -80,6 +83,8 @@ public class PrimaryController implements Initializable{
         fitChartToPane(solutionChart);
         mainChart.setData(series);
         solutionChart.setData(seriesClone);
+        
+        resetBtn.setDisable(true);
 	}
 	
 	public void generateNewRandomData() throws IOException {
@@ -125,6 +130,8 @@ public class PrimaryController implements Initializable{
 			}	
 			mainChart.updateTour(alg.getBestTour());
 		}
+		runBtn.setDisable(true);
+		resetBtn.setDisable(false);
 	}
 	
 	private int getDataSize() {
@@ -151,6 +158,13 @@ public class PrimaryController implements Initializable{
 			textFieldCity.setText("5");
 			return 5;
 		}
+	}
+	
+	public void resetAlg() {
+		alg.readData(data);
+        mainChart.removeTour();
+		runBtn.setDisable(false);
+		resetBtn.setDisable(true);
 	}
 	
 	private void fitChartToPane(TSChart<Number, Number> chart) {

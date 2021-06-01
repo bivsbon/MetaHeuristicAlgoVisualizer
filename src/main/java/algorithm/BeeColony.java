@@ -98,7 +98,6 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 			permutation.add(permNo);
 			foodSources.add(new Tour(fa.generateIthPermutaion(permNo)));
 		}
-		System.out.println("Algorithm set1");
 	}
 	
 	private void employedBeePhase() {
