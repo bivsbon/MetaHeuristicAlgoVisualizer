@@ -28,12 +28,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import utility.DataUtils;
+import utility.LogScreen;
 
 public class PrimaryController implements Initializable{
 	@FXML
 	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList
 	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
 	public ListView<MetaHeuristicAlgorithm> listView1;
+	public ListView<String> logView;
 	public AnchorPane anchor1;
 	public AnchorPane anchor2;
 	public TextField textFieldCity;
@@ -41,6 +43,8 @@ public class PrimaryController implements Initializable{
 	public Label runAlgWarningLabel;
 	public Button runBtn;
 	public Button resetBtn;
+	
+	private LogScreen ls;
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
@@ -59,6 +63,7 @@ public class PrimaryController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ls = new LogScreen(logView);;
 		listView1.setItems(algs);
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
 			@Override
