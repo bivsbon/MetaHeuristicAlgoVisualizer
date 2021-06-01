@@ -56,7 +56,7 @@ public class PrimaryController implements Initializable{
 	AlgorithmContext alg = new AlgorithmContext();
 	SolutionGenerator sg;
 	boolean runningFlag = true;
-	Timeline timer = new Timeline(new KeyFrame(Duration.millis(1), event -> finishedSleeping()));
+	Timeline timer;
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	XYChart.Series<Number, Number> seriesClone = copySeries(series);
@@ -94,6 +94,7 @@ public class PrimaryController implements Initializable{
         anchor1.getChildren().add(mainChart);
         anchor2.getChildren().add(solutionChart);
         
+        configureDelayField();
         configureChart();
         configureSlider();
         
@@ -233,9 +234,33 @@ public class PrimaryController implements Initializable{
 			return true;
 		}
 		return false;
-		
 	}
-
+	
+	private void configureDelayField() {
+		delayField.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				try {
+					int value = Integer.parseInt(newValue);
+					if (value < (int) delaySlider.getMin()) {
+						delayField.setText(Integer.toString((int) delaySlider.getMin()));
+						delaySlider.setValue(delaySlider.getMin());
+					} else if (value > delaySlider.getMax()) {
+						delayField.setText(Integer.toString((int) delaySlider.getMax()));
+						delaySlider.setValue(delaySlider.getMax());
+					}
+					else {
+						delaySlider.setValue(value);
+					}
+				}
+				catch (NumberFormatException e) {
+					delayField.setText(Integer.toString((int) delaySlider.getMin()));
+					delaySlider.setValue(delaySlider.getMin());
+				}
+			}
+		});
+	}
+	
 	private void configureSlider() {
         delaySlider.setValue(20);
         delaySlider.setMin(1);
