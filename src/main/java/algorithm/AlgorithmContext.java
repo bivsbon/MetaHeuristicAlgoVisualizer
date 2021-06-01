@@ -3,7 +3,7 @@ package algorithm;
 import datamodel.CityData;
 import datamodel.Tour;
 
-public class SortingContext {
+public class AlgorithmContext {
 	private MetaHeuristicAlgorithm alg;
 	
 	public void setAlgorithm(MetaHeuristicAlgorithm alg) {

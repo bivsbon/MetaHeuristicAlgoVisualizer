@@ -9,7 +9,7 @@ import algorithm.BeeColony;
 import algorithm.SolutionGenerator;
 import algorithm.MetaHeuristicAlgorithm;
 import algorithm.SimulatedAnnealing;
-import algorithm.SortingContext;
+import algorithm.AlgorithmContext;
 import algorithm.TabuSearch;
 import datamodel.CityData;
 import javafx.beans.value.ChangeListener;
@@ -45,7 +45,7 @@ public class PrimaryController implements Initializable{
 	public Button resetBtn;
 	// Algorithm
 	CityData data = new CityData();
-	SortingContext alg = new SortingContext();
+	AlgorithmContext alg = new AlgorithmContext();
 	SolutionGenerator sg;
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();

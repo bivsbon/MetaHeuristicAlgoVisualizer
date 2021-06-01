@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import algorithm.BeeColony;
 import algorithm.MetaHeuristicAlgorithm;
 import algorithm.SimulatedAnnealing;
-import algorithm.SortingContext;
+import algorithm.AlgorithmContext;
 import algorithm.TabuSearch;
 import datamodel.CityData;
 import datamodel.Tour;
@@ -15,7 +15,7 @@ public class AlgoTest {
 	private static final int N = 10;
 	private static ArrayList<MetaHeuristicAlgorithm> algs = new ArrayList<>();
 	private static final double error = 0.01;
-	private static SortingContext sc = new SortingContext();
+	private static AlgorithmContext sc = new AlgorithmContext();
 	private static double solution = Double.MAX_VALUE;
 	private static Tour solutionTour;
 	static CityData data;
