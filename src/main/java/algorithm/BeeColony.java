@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import datamodel.CityData;
 import datamodel.Tour;
-import utility.FactorialArray;
+import helper.FactorialArray;
 
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();

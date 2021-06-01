@@ -12,8 +12,7 @@ import algorithm.SimulatedAnnealing;
 import algorithm.AlgorithmContext;
 import algorithm.TabuSearch;
 import datamodel.CityData;
-import utility.DataUtils;
-import utility.LogScreen;
+import helper.DataUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,6 +28,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import utility.LogScreen;
+import utility.TSChart;
 
 public class PrimaryController implements Initializable{
 	@FXML
