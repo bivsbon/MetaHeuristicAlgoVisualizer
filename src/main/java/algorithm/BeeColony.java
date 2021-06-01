@@ -46,9 +46,11 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 			// Update solution
 			updateSolution();
 			iterations_left--;
+			logScreen.addLine("Complete 1 iteration");
 			return true;
 		}
 		else {
+			logScreen.addLine("Complete 1 iteration");
 			return false;
 		}
 	}

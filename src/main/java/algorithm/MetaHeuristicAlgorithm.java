@@ -4,6 +4,7 @@ import java.util.Random;
 
 import datamodel.CityData;
 import datamodel.Tour;
+import utility.LogScreen;
 
 public abstract class MetaHeuristicAlgorithm {
 	protected int nCities;
@@ -11,6 +12,7 @@ public abstract class MetaHeuristicAlgorithm {
 	protected double currentSolution;
 	protected Tour bestTour;
 	protected Random generator = new Random();
+	protected LogScreen logScreen = LogScreen.getInstance();
 	
 	public Tour getBestTour() {
 		return bestTour;

@@ -43,8 +43,6 @@ public class PrimaryController implements Initializable{
 	public Label runAlgWarningLabel;
 	public Button runBtn;
 	public Button resetBtn;
-	
-	private LogScreen ls;
 	// Algorithm
 	CityData data = new CityData();
 	SortingContext alg = new SortingContext();
@@ -63,7 +61,8 @@ public class PrimaryController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ls = new LogScreen(logView);;
+		// Set the list view component for displaying log
+		LogScreen.getInstance().setListView(logView);;
 		listView1.setItems(algs);
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
 			@Override
