@@ -38,6 +38,7 @@ public class PrimaryController implements Initializable{
 	public AnchorPane anchor2;
 	public TextField textFieldCity;
 	public Label nCitiesWarningLabel;
+	public Label runAlgWarningLabel;
 	public Button runBtn;
 	public Button resetBtn;
 	// Algorithm
@@ -66,6 +67,8 @@ public class PrimaryController implements Initializable{
 				if (data.size() != 0) {
 					alg.readData(data);
 			        mainChart.removeTour();
+					runBtn.setDisable(false);
+					resetBtn.setDisable(true);
 				}
 			}
 		});
@@ -99,6 +102,8 @@ public class PrimaryController implements Initializable{
         mainChart.removeTour();
         solutionChart.removeTour();
         solutionChart.updateTour(sg.getSolutionTour());
+		runBtn.setDisable(false);
+		resetBtn.setDisable(true);
 	}
 
 	private void addDataToGraph(CityData data) {
@@ -113,8 +118,7 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void showNextIteration() {
-		if (!alg.notSet() && data.size() > 0)
-		{
+		if (assertRunCondition()) {
 			mainChart.updateTour(alg.getBestTour());
 			if (alg.iterate()) {
 				mainChart.updateTour(alg.getBestTour());
@@ -123,15 +127,14 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
-		if (!alg.notSet() && data.size() > 0)
-		{
+		if (assertRunCondition()) {
 			mainChart.updateTour(alg.getBestTour());
 			while (alg.iterate()) {
-			}	
+			}
 			mainChart.updateTour(alg.getBestTour());
+			runBtn.setDisable(true);
+			resetBtn.setDisable(false);
 		}
-		runBtn.setDisable(true);
-		resetBtn.setDisable(false);
 	}
 	
 	private int getDataSize() {
@@ -161,10 +164,13 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void resetAlg() {
-		alg.readData(data);
-        mainChart.removeTour();
-		runBtn.setDisable(false);
-		resetBtn.setDisable(true);
+		if (!alg.notSet() && data.size() > 0)
+		{
+			alg.readData(data);
+	        mainChart.removeTour();
+			runBtn.setDisable(false);
+			resetBtn.setDisable(true);
+		}
 	}
 	
 	private void fitChartToPane(TSChart<Number, Number> chart) {
@@ -181,6 +187,21 @@ public class PrimaryController implements Initializable{
 	                  .map(data -> new XYChart.Data<S, T>(data.getXValue(), data.getYValue()))
 	                  .collect(Collectors.toCollection(FXCollections::observableArrayList)));
 	    return copy;
+	}
+	
+	private boolean assertRunCondition() {
+		if (alg.notSet()){
+			runAlgWarningLabel.setText("May be set an algorithm, no?");			
+		}
+		else if (data.size() <= 0) {
+			runAlgWarningLabel.setText("Can't run when there's no data");
+		}
+		else {
+			runAlgWarningLabel.setText("");
+			return true;
+		}
+		return false;
+		
 	}
 }
 

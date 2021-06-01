@@ -50,7 +50,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
             if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
                 currentTour = new Tour(newSolution);
             }
-            
+
             if (currentDistance < bestTour.getCost(data)) {
             	bestTour = new Tour(currentTour);
             }
@@ -64,17 +64,21 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 	public boolean iterate() {
 		if (temperature > MIN_TEMPERATURE)
 		{
-            Tour newSolution = new Tour(bestTour);
+            Tour newSolution = new Tour(currentTour);
             newSolution.swapRanDomCity();
             
             // Get distance of 2 tours
-            double currentDistance   = bestTour.getCost(data);
+            double currentDistance   = currentTour.getCost(data);
             double neighbourDistance = newSolution.getCost(data);
 
             // Decide the distance base on formula
             double rand = generator.nextDouble();
             if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
-                bestTour = new Tour(newSolution);
+                currentTour = new Tour(newSolution);
+            }
+            
+            if (currentDistance < bestTour.getCost(data)) {
+            	bestTour = new Tour(currentTour);
             }
             
             temperature *= 1 - COOLING_RATE;   // Cool system
