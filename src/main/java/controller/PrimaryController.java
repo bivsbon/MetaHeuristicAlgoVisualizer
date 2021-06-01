@@ -12,6 +12,8 @@ import algorithm.SimulatedAnnealing;
 import algorithm.AlgorithmContext;
 import algorithm.TabuSearch;
 import datamodel.CityData;
+import utility.DataUtils;
+import utility.LogScreen;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,8 +29,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import utility.DataUtils;
-import utility.LogScreen;
 
 public class PrimaryController implements Initializable{
 	@FXML
@@ -43,6 +43,7 @@ public class PrimaryController implements Initializable{
 	public Label runAlgWarningLabel;
 	public Button runBtn;
 	public Button resetBtn;
+	LogScreen logScreen = utility.LogScreen.getInstance();
 	// Algorithm
 	CityData data = new CityData();
 	AlgorithmContext alg = new AlgorithmContext();
@@ -62,8 +63,9 @@ public class PrimaryController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Set the list view component for displaying log
-		LogScreen.getInstance().setListView(logView);;
+		logScreen.setListView(logView);;
 		listView1.setItems(algs);
+		// Logic when switching algorithms
         listView1.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MetaHeuristicAlgorithm>() {
 			@Override
 			public void changed(ObservableValue<? extends MetaHeuristicAlgorithm> observable, MetaHeuristicAlgorithm oldValue, MetaHeuristicAlgorithm newValue) {
@@ -72,6 +74,8 @@ public class PrimaryController implements Initializable{
 					alg.readData(data);
 			        mainChart.removeTour();
 				}
+				
+				logScreen.clear();
 				runBtn.setDisable(false);
 				resetBtn.setDisable(true);
 			}
@@ -102,10 +106,14 @@ public class PrimaryController implements Initializable{
 	        alg.readData(data);
 		}
 		sg = new SolutionGenerator(data);
-
+		
+		// Update chart and log screen
         mainChart.removeTour();
         solutionChart.removeTour();
         solutionChart.updateTour(sg.getSolutionTour());
+        logScreen.clear();
+
+        // Button logic
 		runBtn.setDisable(false);
 		resetBtn.setDisable(true);
 	}
@@ -122,6 +130,7 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void showNextIteration() {
+		logScreen.clear();
 		if (assertRunCondition()) {
 			mainChart.updateTour(alg.getBestTour());
 			if (alg.iterate()) {
@@ -131,14 +140,18 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void runAlgorithm() throws InterruptedException {
+		logScreen.setDisplayDisabled(true);
 		if (assertRunCondition()) {
 			mainChart.updateTour(alg.getBestTour());
 			while (alg.iterate()) {
 			}
 			mainChart.updateTour(alg.getBestTour());
+
+	        // Button logic
 			runBtn.setDisable(true);
 			resetBtn.setDisable(false);
 		}
+		logScreen.setDisplayDisabled(false);
 	}
 	
 	private int getDataSize() {
@@ -168,10 +181,13 @@ public class PrimaryController implements Initializable{
 	}
 	
 	public void resetAlg() {
+		logScreen.clear();
 		if (!alg.notSet() && data.size() > 0)
 		{
 			alg.readData(data);
 	        mainChart.removeTour();
+
+	        // Button logic
 			runBtn.setDisable(false);
 			resetBtn.setDisable(true);
 		}

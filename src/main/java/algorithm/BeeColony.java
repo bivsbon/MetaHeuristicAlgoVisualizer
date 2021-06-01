@@ -10,8 +10,8 @@ import utility.FactorialArray;
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
 	private static final int N_ITERATIONS = 1000;
-	private static final int N_FOOD_SOURCES = 20;
-	private static final int LIMIT = 4;
+	private static final int N_FOOD_SOURCES = 5;
+	private static final int LIMIT = 2;
 	private static int iterations_left;
 	
 	FactorialArray fa;
@@ -39,9 +39,15 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	public boolean iterate() {
 		// Call this function to execute one iteration of the algorithm
 		if (iterations_left > 0) {
+			logScreen.addLine("Running employed bee phase...");
 			employedBeePhase();
+			logScreen.addLine("");
+			logScreen.addLine("Running onlooker bee phase...");
 			onlookerBeePhase();
+			logScreen.addLine("");
+			logScreen.addLine("Running scout bee phase...");
 			scoutBeePhase();
+			logScreen.addLine("");
 
 			// Update solution
 			updateSolution();
@@ -110,6 +116,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	}
 	
 	private void onlookerBeePhase() {
+		logScreen.addLine("Generating probabilities that food sources will be update this iteration");
 		double[] prob = new double[N_FOOD_SOURCES];
 		double sum = 0.0;
 		for (double f : fitnessValues) {
@@ -119,21 +126,24 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 			prob[i] = fitnessValues[i] / sum;
 		}
 		
-		int foodIndex = 0;
+		int foodIndex = -1;
 		double r;
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			do {
 				r = generator.nextDouble();
 				foodIndex = (foodIndex+1) % N_FOOD_SOURCES;
-			} while (r < prob[i]);
+				logScreen.addLine("Food source " + Integer.toString(foodIndex+1) + " probability of updating: " + String.format("%.4f", prob[i]));
+			} while (r < prob[foodIndex]);
 
-			updateFoodSource(i);
+			updateFoodSource(foodIndex);
 		}
 	}
 	
 	private void scoutBeePhase() {
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			if (trial[i] > LIMIT) {
+				logScreen.addLine("Food source " + Integer.toString(i+1) + " has trial counter greater than " + Integer.toString(LIMIT));
+				logScreen.addLine("Replace food source " + Integer.toString(i+1) + " with a random food source");
 				long permNo;
 				do {
 					permNo = ThreadLocalRandom.current().nextLong(fa.getNFactorial());
@@ -156,16 +166,16 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	}
 	
 	private boolean updateFoodSource(int i) {
+		logScreen.addLine("Update food source " + Integer.toString(i+1));
 		int partner;
 		do {
 			partner = generator.nextInt(N_FOOD_SOURCES);
 		} while (i == partner);
-			
-		// Create new food source with the random partner
+
+		logScreen.addLine("Create new food source with random partner: " + Integer.toString(partner+1));
 		long newPerm = fa.generateNewPerm(permutation.get(i), permutation.get(partner));
 		Tour newFoodSource = new Tour(fa.generateIthPermutaion(newPerm));
 		
-		// Greedy selection based on fitness function
 		double newCost = newFoodSource.getCost(data);
 		double newFitness = fitness(newCost);
 		if (newFitness > fitnessValues[i]) {;
@@ -174,17 +184,21 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 			fitnessValues[i] = newFitness;
 			trial[i] = 0;
 			permutation.set(i, newPerm);
+			logScreen.addLine("Accept new food source");
 			return true;
 		}
 		else trial[i]++;
+		logScreen.addLine("Reject new food source, increase trial counter for this food source by 1");
 		return false;
 	}
 	
-	private void updateSolution() {
+	private void updateSolution() {	
 		for (int i = 0; i < N_FOOD_SOURCES; i++) {
 			if (costValues[i] < currentSolution) {
 				currentSolution = costValues[i];
 				bestTour = foodSources.get(i);
+				
+				logScreen.addLine("Found new solution in food source " + Integer.toString(i+1));
 			}
 		}
 	}
