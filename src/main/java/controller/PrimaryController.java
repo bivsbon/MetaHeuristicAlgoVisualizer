@@ -67,9 +67,9 @@ public class PrimaryController implements Initializable{
 				if (data.size() != 0) {
 					alg.readData(data);
 			        mainChart.removeTour();
-					runBtn.setDisable(false);
-					resetBtn.setDisable(true);
 				}
+				runBtn.setDisable(false);
+				resetBtn.setDisable(true);
 			}
 		});
 
