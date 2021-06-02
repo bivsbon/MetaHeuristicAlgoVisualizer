@@ -64,7 +64,7 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 		            l.setStroke(c);
 		        }
 	        	lineSerie.get(0).setStroke(c);
-		        setLineEndPoints(lineSerie.get(0), tour.get(0), tour.get(1));
+		        setLineEndPoints(lineSerie.get(0), tour.get(0), tour.get(dataSize-1));
 	        }
 		}
     }

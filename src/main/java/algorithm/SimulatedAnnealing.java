@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import datamodel.CityData;
@@ -8,7 +9,7 @@ import datamodel.Tour;
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private double temperature = 9999;
     private static final double INITIAL_TEMPERATURE = 9999;
-    private static final double COOLING_RATE = 0.02;
+    private static final double COOLING_RATE = 0.005;
     private static final double MIN_TEMPERATURE = 0.99;
     
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
@@ -79,10 +80,9 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
                 currentTour = new Tour(newSolution);
             }
             
-//            if (currentDistance < bestTour.getCost(data)) {
-//            	bestTour = new Tour(currentTour);
-//            }
-            bestTour = new Tour(currentTour);
+            if (currentDistance < bestTour.getCost(data)) {
+            	bestTour = new Tour(currentTour);
+            }
             
             temperature *= 1 - COOLING_RATE;   // Cool system
 			return true;
@@ -105,7 +105,8 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 
 	@Override
 	public List<Tour> getMinorTours() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Tour> list = new ArrayList<>();
+		list.add(currentTour);
+		return list;
 	}
 }
