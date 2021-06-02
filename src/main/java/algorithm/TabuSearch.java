@@ -1,6 +1,9 @@
 package algorithm;
 
+import java.util.List;
+
 import datamodel.CityData;
+import datamodel.Tour;
 
 public class TabuSearch extends MetaHeuristicAlgorithm{
 	private static final TabuSearch instance = new TabuSearch();
@@ -38,6 +41,12 @@ public class TabuSearch extends MetaHeuristicAlgorithm{
 
 	@Override
 	public String getVariableString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Tour> getMinorTours() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -14,12 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class TSChart<X, Y> extends ScatterChart<X, Y> {
-	private static final List<Color> COLOR_LIST = new ArrayList<Color>(Arrays.asList(Color.RED, Color.CYAN, 
+	private static final List<Color> COLOR_LIST = new ArrayList<Color>(Arrays.asList(Color.BLACK, Color.RED, Color.CYAN, 
 			Color.BLUE, Color.PURPLE, Color.GREEN, Color.CHOCOLATE, Color.DEEPPINK, Color.DODGERBLUE, Color.GOLD,
 			Color.GRAY, Color.MAGENTA, Color.LIGHTGREEN, Color.LIGHTSALMON, Color.MEDIUMSLATEBLUE));
     private List<List<Line>> lineSeries = new ArrayList<>();
 	private ObservableList<List<Integer>> tours = FXCollections.observableArrayList();
 	private int dataSize;
+	private int nTours;
 	Color lineColor = Color.GOLD;
 	
 	public TSChart(Axis<X> xAxis, Axis<Y> yAxis) {
@@ -28,37 +29,54 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 	    tours.addListener((InvalidationListener)observable -> layoutPlotChildren());
 	}
 	
-	public void updateTour(int index, List<Tour> tourList) {
-		for (Tour t : tourList) {
-			updateTour(index++, t);
-		}
-	}
-	
 	public void updateTour(Tour mainTour, List<Tour> minorTours) {
-		
-	}
-	
-	public void updateTour(Tour mainTour, Tour minortour) {
-		ObservableList<Integer> t = tours.get(index);
-		t.setAll(tour.getTour());
-		dataSize = tour.size();
-		for (int i = 0; i < dataSize; i++) {
-	        Line line = new Line();
-	        getPlotChildren().add(line);
-	        lineSeries.get(index).add(line);
+		List<List<Integer>> list = new ArrayList<>();
+		list.add(mainTour.getTour());
+		for (Tour tour : minorTours) {
+			list.add(tour.getTour());
+		}
+		tours.setAll(list);
+		dataSize = tours.get(0).size();
+		nTours = list.size();
+		for (int i = 0; i < nTours; i++) {
+			List<Line> lineSerie = new ArrayList<>();
+			for (int j = 0; j < dataSize; j++) {
+				Line line = new Line();
+				getPlotChildren().add(line);
+				lineSerie.add(line);
+			}
+			lineSeries.add(lineSerie);
 		}
 	}
+	
+//	public void updateTour(Tour mainTour, Tour minortour) {
+//		ObservableList<Integer> t = tours.get(index);
+//		t.setAll(tour.getTour());
+//		dataSize = tour.size();
+//		for (int i = 0; i < dataSize; i++) {
+//	        Line line = new Line();
+//	        getPlotChildren().add(line);
+//	        lineSeries.get(index).add(line);
+//		}
+//	}
 	
 	@Override
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
 		if (dataSize > 0) {
-	        for (int i = 1; i < dataSize; i++) {
-	            Line l = lines.get(i);
-	            setLineEndPoints(l, tour.get(i), tour.get(i-1));
-	            l.setStroke(lineColor);
+	        for (int i = 0; i < nTours; i++) {
+	        	List<Line> lineSerie = lineSeries.get(i);
+	        	List<Integer> tour = tours.get(i);
+	        	Color c = COLOR_LIST.get(i);
+	        	for (int j = 1; j < dataSize; j++) {
+		            Line l = lineSerie.get(j);
+		            setLineEndPoints(l, tour.get(j), tour.get(j-1));
+		            l.setStroke(lineColor);
+		            l.setStroke(c);
+		        }
+	        	lineSerie.get(0).setStroke(c);
+		        setLineEndPoints(lineSerie.get(0), tour.get(0), tour.get(1));
 	        }
-	        setLineEndPoints(lines.get(0), tour.get(0), tour.get(1));
 		}
     }
 	
@@ -82,17 +100,15 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 	
 	public void clearTour() {
 		for (int i = 0; i < tours.size(); i++) {
-			for (List<lines> l : line) {
-				getPlotChildren().remove(l);
+			for (List<Line> lineSerie : lineSeries) {
+				for (Line l : lineSerie) {
+					getPlotChildren().remove(l);
+				}
 			}
-			
 		}
 		dataSize = 0;
-		tour.clear();
-		lines.clear();
-	}
-	
-	public void changeColor() {
-		lineColor = lineColor.invert();
+		nTours = 0;
+		tours.clear();
+		lineSeries.clear();
 	}
 }

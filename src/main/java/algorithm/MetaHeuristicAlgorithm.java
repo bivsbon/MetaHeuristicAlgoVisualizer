@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.util.List;
 import java.util.Random;
 
 import datamodel.CityData;
@@ -26,6 +27,7 @@ public abstract class MetaHeuristicAlgorithm {
 	public abstract boolean iterate();
 	public abstract void readData(CityData data);
 	public abstract String getVariableString();
+	public abstract List<Tour> getMinorTours();
 	
 	@Override
 	public abstract String toString();

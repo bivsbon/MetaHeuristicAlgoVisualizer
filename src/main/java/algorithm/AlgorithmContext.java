@@ -1,5 +1,7 @@
 package algorithm;
 
+import java.util.List;
+
 import datamodel.CityData;
 import datamodel.Tour;
 
@@ -8,6 +10,10 @@ public class AlgorithmContext {
 	
 	public void setAlgorithm(MetaHeuristicAlgorithm alg) {
 		this.alg = alg;
+	}
+	
+	public MetaHeuristicAlgorithm getAlgorithm() {
+		return alg;
 	}
 	
 	public double solve(CityData data) {
@@ -28,5 +34,9 @@ public class AlgorithmContext {
 	
 	public Tour getBestTour() {
 		return alg.getBestTour();
+	}
+	
+	public List<Tour> getMinorTours() {
+		return alg.getMinorTours();
 	}
 }

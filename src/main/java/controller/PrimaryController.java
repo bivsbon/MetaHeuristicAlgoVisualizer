@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -82,7 +83,7 @@ public class PrimaryController implements Initializable{
 				if (data.size() != 0) {
 					runningFlag = false;
 					alg.readData(data);
-			        mainChart.removeTour();
+			        mainChart.clearTour();
 				}
 				
 				logScreen.clear();
@@ -104,7 +105,10 @@ public class PrimaryController implements Initializable{
 	private void finishedSleeping() {
 		timer.stop();
 		if (alg.iterate() && runningFlag == true) {
-			mainChart.updateTour(alg.getBestTour());
+			if (alg.getAlgorithm() instanceof BeeColony) {
+				BeeColony bc = BeeColony.getInstance();
+				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
+			}
 			timer.play();
 		}
 	}
@@ -121,9 +125,9 @@ public class PrimaryController implements Initializable{
 		sg = new SolutionGenerator(data);
 		
 		// Update chart and log screen
-        mainChart.removeTour();
-        solutionChart.removeTour();
-        solutionChart.updateTour(sg.getSolutionTour());
+        mainChart.clearTour();
+        solutionChart.clearTour();
+        solutionChart.updateTour(sg.getSolutionTour(), new ArrayList<>());
         logScreen.clear();
 
         // Button logic
@@ -146,9 +150,12 @@ public class PrimaryController implements Initializable{
 	public void showNextIteration() {
 		logScreen.clear();
 		if (assertRunCondition()) {
-			mainChart.updateTour(alg.getBestTour());
-			if (alg.iterate()) {
-				mainChart.updateTour(alg.getBestTour());
+			if (alg.getAlgorithm() instanceof BeeColony) {
+				BeeColony bc = BeeColony.getInstance();
+				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
+				if (alg.iterate()) {
+					mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
+				}
 			}
 		}
 	}
@@ -158,10 +165,16 @@ public class PrimaryController implements Initializable{
 		timer = new Timeline(new KeyFrame(Duration.millis((int)delaySlider.getValue()), event -> finishedSleeping()));
 		logScreen.setDisplayDisabled(true);
 		if (assertRunCondition()) {
+			if (alg.getAlgorithm() instanceof BeeColony) {
+				BeeColony bc = BeeColony.getInstance();
+				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
+				while (alg.iterate()) {
+				}
+				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
+			}
 	        // Button logic
 			runBtn.setDisable(true);
 			resetBtn.setDisable(false);
-			mainChart.updateTour(alg.getBestTour());
 			timer.play();
 		}
 		logScreen.setDisplayDisabled(false);
@@ -199,7 +212,7 @@ public class PrimaryController implements Initializable{
 		if (!alg.notSet() && data.size() > 0)
 		{
 			alg.readData(data);
-	        mainChart.removeTour();
+	        mainChart.clearTour();
 
 	        // Button logic
 			runBtn.setDisable(false);

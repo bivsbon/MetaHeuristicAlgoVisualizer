@@ -1,6 +1,7 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import datamodel.CityData;
@@ -10,8 +11,8 @@ import helper.FactorialArray;
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
 	private static final int N_ITERATIONS = 1000;
-	private static final int N_FOOD_SOURCES = 5;
-	private static final int LIMIT = 2;
+	private static final int N_FOOD_SOURCES = 3;
+	private static final int LIMIT = 1;
 	private static int iterations_left;
 	
 	FactorialArray fa;
@@ -210,5 +211,10 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	public String getVariableString() {
 		// TODO return variable for user
 		return "";
+	}
+
+	@Override
+	public List<Tour> getMinorTours() {
+		return foodSources;
 	}
 }
