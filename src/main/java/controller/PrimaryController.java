@@ -105,10 +105,7 @@ public class PrimaryController implements Initializable{
 	private void finishedSleeping() {
 		timer.stop();
 		if (alg.iterate() && runningFlag == true) {
-			if (alg.getAlgorithm() instanceof BeeColony) {
-				BeeColony bc = BeeColony.getInstance();
-				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
-			}
+			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
 			timer.play();
 		}
 	}
@@ -150,12 +147,9 @@ public class PrimaryController implements Initializable{
 	public void showNextIteration() {
 		logScreen.clear();
 		if (assertRunCondition()) {
-			if (alg.getAlgorithm() instanceof BeeColony) {
-				BeeColony bc = BeeColony.getInstance();
-				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
-				if (alg.iterate()) {
-					mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
-				}
+			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+			if (alg.iterate()) {
+				mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
 			}
 		}
 	}
@@ -165,16 +159,10 @@ public class PrimaryController implements Initializable{
 		timer = new Timeline(new KeyFrame(Duration.millis((int)delaySlider.getValue()), event -> finishedSleeping()));
 		logScreen.setDisplayDisabled(true);
 		if (assertRunCondition()) {
-			if (alg.getAlgorithm() instanceof BeeColony) {
-				BeeColony bc = BeeColony.getInstance();
-				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
-				while (alg.iterate()) {
-				}
-				mainChart.updateTour(bc.getBestTour(), bc.getMinorTours());
-			}
 	        // Button logic
 			runBtn.setDisable(true);
 			resetBtn.setDisable(false);
+			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
 			timer.play();
 		}
 		logScreen.setDisplayDisabled(false);
@@ -237,7 +225,7 @@ public class PrimaryController implements Initializable{
 	
 	private boolean assertRunCondition() {
 		if (alg.notSet()){
-			runAlgWarningLabel.setText("May be set an algorithm, no?");			
+			runAlgWarningLabel.setText("May be set an algorithm, no?");	
 		}
 		else if (data.size() <= 0) {
 			runAlgWarningLabel.setText("Can't run when there's no data");

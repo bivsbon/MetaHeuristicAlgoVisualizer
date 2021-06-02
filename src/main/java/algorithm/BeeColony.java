@@ -10,7 +10,7 @@ import helper.FactorialArray;
 
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
-	private static final int N_ITERATIONS = 1000;
+	private static final int N_ITERATIONS = 100;
 	private static final int N_FOOD_SOURCES = 3;
 	private static final int LIMIT = 1;
 	private static int iterations_left;

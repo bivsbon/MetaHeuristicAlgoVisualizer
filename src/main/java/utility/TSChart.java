@@ -49,17 +49,6 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 		}
 	}
 	
-//	public void updateTour(Tour mainTour, Tour minortour) {
-//		ObservableList<Integer> t = tours.get(index);
-//		t.setAll(tour.getTour());
-//		dataSize = tour.size();
-//		for (int i = 0; i < dataSize; i++) {
-//	        Line line = new Line();
-//	        getPlotChildren().add(line);
-//	        lineSeries.get(index).add(line);
-//		}
-//	}
-	
 	@Override
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
