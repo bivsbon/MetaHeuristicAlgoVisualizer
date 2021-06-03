@@ -37,16 +37,20 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 		variablesInit();
 	}
 	
+	
 	public boolean iterate() {
 		// Call this function to execute one iteration of the algorithm
 		if (iterations_left > 0) {
 			logScreen.addLine("Running employed bee phase...");
+			
 			employedBeePhase();
 			logScreen.addLine("");
 			logScreen.addLine("Running onlooker bee phase...");
+			
 			onlookerBeePhase();
 			logScreen.addLine("");
 			logScreen.addLine("Running scout bee phase...");
+			
 			scoutBeePhase();
 			logScreen.addLine("");
 

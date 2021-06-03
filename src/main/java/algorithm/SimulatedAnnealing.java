@@ -2,25 +2,25 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import datamodel.CityData;
 import datamodel.Tour;
 
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
-    private double temperature = 9999;
-    private static final double INITIAL_TEMPERATURE = 9999;
-    private static final double COOLING_RATE = 0.005;
+    private double temperature;
+    private static final double INITIAL_TEMPERATURE = 999;
+    private static final double COOLING_RATE = 0.05;
     private static final double MIN_TEMPERATURE = 0.99;
     
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
-    
+    public static SimulatedAnnealing getInstance() {
+    	return instance;
+    }
+    	
     private Tour currentTour;
     
     private SimulatedAnnealing() {}
     
-    public static SimulatedAnnealing getInstance() {
-    	return instance;
-    }
+   
     
     public void readData(CityData data ) {
     	this.data = data;
@@ -65,10 +65,16 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 
 	@Override
 	public boolean iterate() {
+		int[] indexCity = new int[2];
+		logScreen.addLine("Cooling Rate is " + COOLING_RATE);
 		if (temperature > MIN_TEMPERATURE)
 		{
+			
             Tour newSolution = new Tour(currentTour);
             newSolution.swapRanDomCity();
+            indexCity = newSolution.swapRanDomCity();
+            
+            logScreen.addLine("Swap City " + indexCity[0] + " and City " + indexCity[1]);
             
             // Get distance of 2 tours
             double currentDistance   = currentTour.getCost(data);
@@ -79,15 +85,24 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
             if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
                 currentTour = new Tour(newSolution);
             }
-            
+            logScreen.addLine("Find New Cost is " + currentTour.getCost(data));
             if (currentDistance < bestTour.getCost(data)) {
             	bestTour = new Tour(currentTour);
+            	logScreen.addLine("Update new tour successfully ");
+            	logScreen.addLine("New Best Cost is " + bestTour.getCost(data));
             }
             
+            else {
+            	logScreen.addLine("The Cost is not change");
+            	logScreen.addLine("Current Best Cost is " + bestTour.getCost(data));
+            }
+            logScreen.addLine("Temperature is " + temperature);
+            logScreen.addLine("");
             temperature *= 1 - COOLING_RATE;   // Cool system
 			return true;
 		}
 		else {
+			logScreen.addLine("Final Best Cost is " + bestTour.getCost(data));
 			return false;		
 		}
 	}
