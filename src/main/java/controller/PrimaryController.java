@@ -30,7 +30,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import utility.LogScreen;
@@ -51,6 +53,8 @@ public class PrimaryController implements Initializable{
 	public Button resetBtn;
 	public TextField delayField;
 	public Slider delaySlider;
+	public TextArea variableArea;
+	public TitledPane solutionPane;
 	LogScreen logScreen = utility.LogScreen.getInstance();
 	// Algorithm
 	CityData data = new CityData();
@@ -106,6 +110,7 @@ public class PrimaryController implements Initializable{
 		timer.stop();
 		if (alg.iterate() && runningFlag == true) {
 			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+			variableArea.setText(alg.getVariableString());
 			timer.play();
 		}
 	}
@@ -118,8 +123,10 @@ public class PrimaryController implements Initializable{
 		addDataToGraph(data);
 		if (!alg.notSet()) {
 	        alg.readData(data);
+			variableArea.clear();
 		}
 		sg = new SolutionGenerator(data);
+		solutionPane.setText("Correct solution: " + sg.getTourCost());
 		
 		// Update chart and log screen
         mainChart.clearTour();
@@ -150,6 +157,7 @@ public class PrimaryController implements Initializable{
 			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
 			if (alg.iterate()) {
 				mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+				variableArea.setText(alg.getVariableString());
 			}
 		}
 	}
@@ -201,6 +209,7 @@ public class PrimaryController implements Initializable{
 		{
 			alg.readData(data);
 	        mainChart.clearTour();
+			variableArea.clear();
 
 	        // Button logic
 			runBtn.setDisable(false);

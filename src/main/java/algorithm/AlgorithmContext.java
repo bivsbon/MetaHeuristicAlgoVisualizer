@@ -39,4 +39,8 @@ public class AlgorithmContext {
 	public List<Tour> getMinorTours() {
 		return alg.getMinorTours();
 	}
+	
+	public String getVariableString() {
+		return alg.getVariableString();
+	}
 }
