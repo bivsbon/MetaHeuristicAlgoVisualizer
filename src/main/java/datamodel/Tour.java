@@ -8,23 +8,27 @@ import javafx.geometry.Point2D;
 
 public class Tour {
 	private ArrayList<Integer> tour = new ArrayList<>();
+	
 	Random generator = new Random();
 	
 	public ArrayList<Integer> getTour() {
 		return tour;
 	}
 	
-	public void swapRanDomCity() {
+	public int[] swapRanDomCity() {
 		//TODO: Swap the order of 2 city in route
-		int index1 = generator.nextInt(tour.size());
-		int index2;
-		do {
-			index2 = generator.nextInt(tour.size());
-		} while (index1 == index2);
 		
-		int tmp = tour.get(index1);
-		tour.set(index1, tour.get(index2));
-		tour.set(index2, tmp);
+		int[] index = new int[2];
+		index[0] = generator.nextInt(tour.size());
+		
+		do {
+			index[1] = generator.nextInt(tour.size());
+		} while (index[0] == index[1]);
+		
+		int tmp = tour.get(index[0]);
+		tour.set(index[0], tour.get(index[1]));
+		tour.set(index[1], tmp);
+		return index;
 	}
 	
 	public Tour(int n) {
