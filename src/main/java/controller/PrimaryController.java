@@ -41,7 +41,7 @@ import utility.TSChart;
 
 public class PrimaryController implements Initializable{
 	@FXML
-	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList(Algorithm.getAlgorithmList());
+	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList(AlgorithmContext.getAlgorithmList());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public ListView<String> logView;
 	public AnchorPane anchor1;
