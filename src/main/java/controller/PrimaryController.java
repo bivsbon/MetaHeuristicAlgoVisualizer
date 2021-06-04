@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,7 @@ import utility.TSChart;
 
 public class PrimaryController implements Initializable{
 	@FXML
-	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList
-	(SimulatedAnnealing.getInstance(), TabuSearch.getInstance(), BeeColony.getInstance());
+	ObservableList<MetaHeuristicAlgorithm> algs = FXCollections.observableArrayList(Algorithm.getAlgorithmList());
 	public ListView<MetaHeuristicAlgorithm> listView1;
 	public ListView<String> logView;
 	public AnchorPane anchor1;
@@ -82,7 +82,6 @@ public class PrimaryController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// Set the list view component for displaying log
 		logScreen.setListView(logView);
 		listView1.setItems(algs);
 		// Logic when switching algorithms

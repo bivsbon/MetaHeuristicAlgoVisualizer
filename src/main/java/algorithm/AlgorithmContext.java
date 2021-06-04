@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import datamodel.CityData;
@@ -34,5 +35,13 @@ public class AlgorithmContext {
 	
 	public String getVariableString() {
 		return alg.getVariableString();
+	}
+	
+	public static ArrayList<MetaHeuristicAlgorithm> getAlgorithmList() {
+		ArrayList<MetaHeuristicAlgorithm> list = new ArrayList<>();
+		list.add(SimulatedAnnealing.getInstance());
+		list.add(TabuSearch.getInstance());
+		list.add(BeeColony.getInstance());
+		return list;
 	}
 }
