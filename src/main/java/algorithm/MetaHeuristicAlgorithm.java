@@ -23,10 +23,11 @@ public abstract class MetaHeuristicAlgorithm {
 		return currentSolution;
 	}
 
-	public abstract double solve(CityData data);
 	public abstract boolean iterate();
 	public abstract void readData(CityData data);
-	public abstract String getVariableString();
+	public String getVariableString() {
+		return "Current best solution: " + Double.toString(bestTour.getCost(data));
+	}
 	public abstract List<Tour> getMinorTours();
 	
 	@Override

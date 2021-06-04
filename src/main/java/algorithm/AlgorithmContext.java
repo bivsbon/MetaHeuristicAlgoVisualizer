@@ -12,14 +12,6 @@ public class AlgorithmContext {
 		this.alg = alg;
 	}
 	
-	public MetaHeuristicAlgorithm getAlgorithm() {
-		return alg;
-	}
-	
-	public double solve(CityData data) {
-		return alg.solve(data);
-	}
-	
 	public boolean iterate() {
 		return alg.iterate();
 	}

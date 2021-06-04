@@ -32,44 +32,6 @@ public class TabuSearch extends MetaHeuristicAlgorithm{
         currentTour = new Tour(nCities);
         Init_Step = 1;
 	}
-	 
-	
-	@Override
-	public double solve(CityData data) {
-		readData(data);
-		double bestDistance = bestTour.getCost(data);
-		int[] indexCity = new int[2];
-		while(Init_Step < Stop_Condition ) {
-			Tour newSolution = new Tour(currentTour);
-			double minDistance=99999;
-			for(int i=0; i < Stop_Random_Condition; i++) {
-				newSolution.swapRanDomCity();
-				indexCity = newSolution.swapRanDomCity();
-				/*
-				if(TabuList.isEmpty() ) {
-					TabuList.add( new Pair <Integer,Integer> (indexCity[0], indexCity[1]) );
-				}
-				else if(TabuList.peek() != new Pair <Integer,Integer> (indexCity[0], indexCity[1])) {
-					TabuList.add( new Pair <Integer,Integer> (indexCity[0], indexCity[1]) );
-					TabuList.poll();
-				}
-				else 
-					continue;
-					*/
-					
-				minDistance = Math.min(minDistance, newSolution.getCost(data));
-				if(minDistance == newSolution.getCost(data)) {
-					currentTour = new Tour(newSolution);
-				}
-				if(newSolution.getCost(data)<bestTour.getCost(data))
-					bestTour = new Tour(newSolution);
-			}
-			bestDistance = Math.min(minDistance, bestDistance);
-			Init_Step ++;
-		}
-		
-		return bestDistance;
-	}
 	
 	public boolean iterate() {
 		int[] indexCity = new int[2];
@@ -109,22 +71,18 @@ public class TabuSearch extends MetaHeuristicAlgorithm{
 		}
 		else {
 			logScreen.addLine("Final Best Cost is " + bestTour.getCost(data));
-			return false;		
+			return false;
 		}
 	}
 
 	@Override
 	public String toString() {
-		
 		return "Tabu Search";
 	}
 
-	
-
 	@Override
 	public String getVariableString() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getVariableString();
 	}
 
 	@Override

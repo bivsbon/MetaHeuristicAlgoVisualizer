@@ -16,11 +16,8 @@ public class Tour {
 	}
 	
 	public int[] swapRanDomCity() {
-		//TODO: Swap the order of 2 city in route
-		
 		int[] index = new int[2];
 		index[0] = generator.nextInt(tour.size());
-		
 		do {
 			index[1] = generator.nextInt(tour.size());
 		} while (index[0] == index[1]);

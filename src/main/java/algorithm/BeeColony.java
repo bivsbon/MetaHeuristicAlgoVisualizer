@@ -11,8 +11,8 @@ import helper.FactorialArray;
 public class BeeColony extends MetaHeuristicAlgorithm{
 	private static final BeeColony instance = new BeeColony();
 	private static final int N_ITERATIONS = 1000;
-	private static final int N_FOOD_SOURCES = 3;
-	private static final int LIMIT = 1;
+	private static final int N_FOOD_SOURCES = 5;
+	private static final int LIMIT = 3;
 	private static int iterations_left;
 	
 	FactorialArray fa;
@@ -56,27 +56,14 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 
 			// Update solution
 			updateSolution();
-			iterations_left--;
-			logScreen.addLine("Complete 1 iteration");
+			iterations_left--;;
+			logScreen.addLine("Iteration left: " + Integer.toString(iterations_left));
 			return true;
 		}
-		else {
-			logScreen.addLine("Complete 1 iteration");
+		else {;
+			logScreen.addLine("Iteration left: " + Integer.toString(iterations_left));
 			return false;
 		}
-	}
-
-	@Override
-	public double solve(CityData data) {
-		readData(data);
-		for (int it = 0; it < iterations_left; it++) {
-			employedBeePhase();
-			onlookerBeePhase();
-			scoutBeePhase();
-		}
-		updateSolution();
-		
-		return currentSolution;
 	}
 	
 	private void variablesInit() {
@@ -213,7 +200,7 @@ public class BeeColony extends MetaHeuristicAlgorithm{
 	}
 	
 	public String getVariableString() {
-		return Double.toString(bestTour.getCost(data));
+		return super.getVariableString();
 	}
 
 	@Override

@@ -50,7 +50,8 @@ public class FactorialArray {
  	
 	public long generateNewPerm(long p1, long p2) {
 		double phi = generator.nextDouble()*2 - 1;
-		long newPerm = (int) (p1 + phi * (p1 - p2));
+		long tmp = (long) (phi * (p1 - p2));
+		long newPerm = (long) (p1 + tmp);
 		newPerm = Math.max(0, Math.min(nFactorial, newPerm));
 		return newPerm;
 	}

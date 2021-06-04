@@ -11,6 +11,8 @@ public class LogScreen {
 	private boolean displayDisabled = false;
 	private int count = 0;
 	
+	private LogScreen() {}
+	
 	public static LogScreen getInstance() {
 		return instance;
 	}

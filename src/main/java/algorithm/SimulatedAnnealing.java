@@ -8,7 +8,7 @@ import datamodel.Tour;
 public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private double temperature;
     private static final double INITIAL_TEMPERATURE = 999;
-    private static final double COOLING_RATE = 0.05;
+    private static final double COOLING_RATE = 0.01;
     private static final double MIN_TEMPERATURE = 0.99;
     
     private static SimulatedAnnealing instance = new SimulatedAnnealing();
@@ -19,8 +19,6 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
     private Tour currentTour;
     
     private SimulatedAnnealing() {}
-    
-   
     
     public void readData(CityData data ) {
     	this.data = data;
@@ -35,32 +33,6 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 			return 1.0;
 		}
 		return 1 / (1 + Math.exp(Math.abs(currentDistance - newDistance) / temperature));
-	}
-
-	@Override
-	public double solve(CityData data) {
-		readData(data);
-        
-        while (temperature > MIN_TEMPERATURE) {
-            Tour newSolution = new Tour(currentTour);
-            newSolution.swapRanDomCity();
-            // Get distance of 2 tours
-            double currentDistance   = currentTour.getCost(data);
-            double neighbourDistance = newSolution.getCost(data);
-
-            // Decide the distance base on formula
-            double rand = generator.nextDouble();
-            if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
-                currentTour = new Tour(newSolution);
-            }
-
-            if (currentDistance < bestTour.getCost(data)) {
-            	bestTour = new Tour(currentTour);
-            }
-            	
-            temperature *= 1 - COOLING_RATE;   // Cool system
-        }
-        return bestTour.getCost(data);
 	}
 
 	@Override
@@ -114,8 +86,7 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 
 	@Override
 	public String getVariableString() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getVariableString();
 	}
 
 	@Override
