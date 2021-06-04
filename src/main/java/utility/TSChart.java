@@ -30,6 +30,7 @@ public class TSChart<X, Y> extends ScatterChart<X, Y> {
 	}
 	
 	public void updateTour(Tour mainTour, List<Tour> minorTours) {
+		if (minorTours == null) minorTours = new ArrayList<Tour>();
 		List<List<Integer>> list = new ArrayList<>();
 		list.add(mainTour.getTour());
 		for (Tour tour : minorTours) {

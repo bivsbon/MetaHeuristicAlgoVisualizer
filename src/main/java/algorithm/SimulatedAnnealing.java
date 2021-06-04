@@ -43,7 +43,6 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 		{
 			
             Tour newSolution = new Tour(currentTour);
-            newSolution.swapRanDomCity();
             indexCity = newSolution.swapRanDomCity();
             
             logScreen.addLine("Swap City " + indexCity[0] + " and City " + indexCity[1]);
@@ -57,18 +56,18 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
             if (acceptanceProbability(currentDistance, neighbourDistance) > rand) {
                 currentTour = new Tour(newSolution);
             }
-            logScreen.addLine("Find New Cost is " + currentTour.getCost(data));
+            logScreen.addLine("Find New Cost: " + currentTour.getCost(data));
             if (currentDistance < bestTour.getCost(data)) {
             	bestTour = new Tour(currentTour);
-            	logScreen.addLine("Update new tour successfully ");
-            	logScreen.addLine("New Best Cost is " + bestTour.getCost(data));
+            	logScreen.addLine("Accept new solution");
+            	logScreen.addLine("New Best Cost: " + bestTour.getCost(data));
             }
             
             else {
-            	logScreen.addLine("The Cost is not change");
+            	logScreen.addLine("Reject new solution");
             	logScreen.addLine("Current Best Cost is " + bestTour.getCost(data));
             }
-            logScreen.addLine("Temperature is " + temperature);
+            logScreen.addLine("Cooling the temperature");
             logScreen.addLine("");
             temperature *= 1 - COOLING_RATE;   // Cool system
 			return true;
@@ -86,7 +85,12 @@ public class SimulatedAnnealing extends MetaHeuristicAlgorithm{
 
 	@Override
 	public String getVariableString() {
-		return super.getVariableString();
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.getVariableString());
+		sb.append("\n");
+		sb.append("Temperature: ");
+		sb.append(temperature);
+		return sb.toString();
 	}
 
 	@Override

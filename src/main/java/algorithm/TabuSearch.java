@@ -8,12 +8,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TabuSearch extends MetaHeuristicAlgorithm{
-	private static int Init_Step = 1;
+	private int Init_Step = 1;
 	private static final int Stop_Condition = 1000;
 	private static final int Stop_Random_Condition = 100;
 	
-	
-	 
 	private static TabuSearch instance = new TabuSearch();
 	public static TabuSearch getInstance() {
     	return instance;

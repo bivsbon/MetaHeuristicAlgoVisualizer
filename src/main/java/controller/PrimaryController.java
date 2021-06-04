@@ -46,6 +46,7 @@ public class PrimaryController implements Initializable{
 	public ListView<String> logView;
 	public AnchorPane anchor1;
 	public AnchorPane anchor2;
+	public AnchorPane anchor3;
 	public TextField textFieldCity;
 	public Label nCitiesWarningLabel;
 	public Label runAlgWarningLabel;
@@ -64,15 +65,20 @@ public class PrimaryController implements Initializable{
 	Timeline timer;
 	// Chart
 	XYChart.Series<Number, Number> series = new XYChart.Series<>();
-	XYChart.Series<Number, Number> seriesClone = copySeries(series);
+	XYChart.Series<Number, Number> seriesClone1 = copySeries(series);
+	XYChart.Series<Number, Number> seriesClone2 = copySeries(series);
     final NumberAxis xAxisMain = new NumberAxis(-1, 21, 1);
     final NumberAxis yAxisMain = new NumberAxis(-1, 21, 1);
     final NumberAxis xAxisSolution = new NumberAxis(-1, 21, 25);
     final NumberAxis yAxisSolution = new NumberAxis(-1, 21, 25);
+    final NumberAxis xAxisBest = new NumberAxis(-1, 21, 25);
+    final NumberAxis yAxisBest = new NumberAxis(-1, 21, 25);
     final TSChart<Number,Number> solutionChart = new
             TSChart<Number,Number>(xAxisSolution, yAxisSolution);
     final TSChart<Number,Number> mainChart = new
             TSChart<Number,Number>(xAxisMain, yAxisMain);
+    final TSChart<Number,Number> bestChart = new
+            TSChart<Number,Number>(xAxisBest, yAxisBest);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -88,6 +94,7 @@ public class PrimaryController implements Initializable{
 					runningFlag = false;
 					alg.readData(data);
 			        mainChart.clearTour();
+			        bestChart.clearTour();
 				}
 				
 				logScreen.clear();
@@ -98,6 +105,7 @@ public class PrimaryController implements Initializable{
 
         anchor1.getChildren().add(mainChart);
         anchor2.getChildren().add(solutionChart);
+        anchor3.getChildren().add(bestChart);
         
         configureDelayField();
         configureChart();
@@ -110,6 +118,7 @@ public class PrimaryController implements Initializable{
 		timer.stop();
 		if (alg.iterate() && runningFlag == true) {
 			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+			bestChart.updateTour(alg.getBestTour(), null);
 			variableArea.setText(alg.getVariableString());
 			timer.play();
 		}
@@ -130,6 +139,7 @@ public class PrimaryController implements Initializable{
 		
 		// Update chart and log screen
         mainChart.clearTour();
+        bestChart.clearTour();
         solutionChart.clearTour();
         solutionChart.updateTour(sg.getSolutionTour(), new ArrayList<>());
         logScreen.clear();
@@ -146,8 +156,10 @@ public class PrimaryController implements Initializable{
             series.getData().add(new Data<Number, Number>(p.getX(), p.getY()));
         }
         mainChart.setData(series);
-        seriesClone = copySeries(series);
-        solutionChart.setData(seriesClone);
+        seriesClone1 = copySeries(series);
+        seriesClone2 = copySeries(seriesClone1);
+        solutionChart.setData(seriesClone1);
+        bestChart.setData(seriesClone2);
         series.setName("City");
 	}
 	
@@ -155,8 +167,10 @@ public class PrimaryController implements Initializable{
 		logScreen.clear();
 		if (assertRunCondition()) {
 			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+			bestChart.updateTour(alg.getBestTour(), null);
 			if (alg.iterate()) {
 				mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+				bestChart.updateTour(alg.getBestTour(), null);
 				variableArea.setText(alg.getVariableString());
 			}
 		}
@@ -171,6 +185,7 @@ public class PrimaryController implements Initializable{
 			runBtn.setDisable(true);
 			resetBtn.setDisable(false);
 			mainChart.updateTour(alg.getBestTour(), alg.getMinorTours());
+			bestChart.updateTour(alg.getBestTour(), null);
 			timer.play();
 		}
 		logScreen.setDisplayDisabled(false);
@@ -209,6 +224,7 @@ public class PrimaryController implements Initializable{
 		{
 			alg.readData(data);
 	        mainChart.clearTour();
+	        bestChart.clearTour();
 			variableArea.clear();
 
 	        // Button logic
@@ -293,12 +309,17 @@ public class PrimaryController implements Initializable{
         // Hide stuffs to simplify solution chart
         xAxisSolution.setTickLabelsVisible(false);
         yAxisSolution.setTickLabelsVisible(false);
+        xAxisBest.setTickLabelsVisible(false);
+        yAxisBest.setTickLabelsVisible(false);
         solutionChart.setLegendVisible(false);
+        bestChart.setLegendVisible(false);
         
         fitChartToPane(mainChart);
         fitChartToPane(solutionChart);
+        fitChartToPane(bestChart);
         mainChart.setData(series);
-        solutionChart.setData(seriesClone);
+        solutionChart.setData(seriesClone1);
+        bestChart.setData(seriesClone2);
 	}
 }
 
